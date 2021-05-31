@@ -19,4 +19,4 @@ MonoBehaviour:
   army2Settings:
     warriorCount: 30
     archerCount: 30
-    armyStrategy: 2
+    armyStrategy: 1

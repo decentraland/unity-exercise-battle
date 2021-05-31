@@ -22,6 +22,11 @@ public class ArmyMenu : MonoBehaviour
             armySettings = settings.army1Settings;
         else
             armySettings = settings.army2Settings;
+
+        warriorsCount.value = armySettings.warriorCount;
+        archersCount.value = armySettings.archerCount;
+        defensiveStrategyToggle.isOn = armySettings.armyStrategy == BattleSettings.ArmyStrategy.StrategyDefensive;
+        basicStrategyToggle.isOn = armySettings.armyStrategy == BattleSettings.ArmyStrategy.StrategyBasic;
     }
 
     void Update()
@@ -29,8 +34,8 @@ public class ArmyMenu : MonoBehaviour
         warriorsCountLabel.text = warriorsCount.value.ToString();
         archersCountLabel.text = archersCount.value.ToString();
 
-        warriorsCount.maxValue = 200;
-        archersCount.maxValue = 200;
+        warriorsCount.maxValue = 100;
+        archersCount.maxValue = 100;
 
         armySettings.archerCount = (int)archersCount.value;
         armySettings.warriorCount = (int)warriorsCount.value;

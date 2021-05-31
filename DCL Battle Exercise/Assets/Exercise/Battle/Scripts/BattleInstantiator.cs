@@ -3,9 +3,9 @@ using UnityEditor;
 using UnityEngine;
 
 
-public class BattleManager : MonoBehaviour
+public class BattleInstantiator : MonoBehaviour
 {
-    public static BattleManager instance { get; private set; }
+    public static BattleInstantiator instance { get; private set; }
 
     public BattleSettings settings;
 
@@ -27,19 +27,18 @@ public class BattleManager : MonoBehaviour
     public Color army1Color;
     public Color army2Color;
 
+    public GameOverMenu gameOverMenu;
+
     void InstanceArmy(BattleSettings.ArmySettings settings, Army army, Bounds instanceBounds)
     {
         for ( int i = 0; i < settings.warriorCount; i++ )
         {
             GameObject go = Instantiate(warriorPrefab.gameObject);
-            Vector3 pos = Vector3.zero;
-            pos.x = Random.Range( instanceBounds.min.x, instanceBounds.max.x );
-            pos.z = Random.Range( instanceBounds.min.z, instanceBounds.max.z );
-            go.transform.position = pos;
+            go.transform.position = Utils.GetRandomPosInBounds(instanceBounds);
 
-            go.GetComponent<Warrior>().allyArmy = army;
-            go.GetComponent<Warrior>().settings = settings;
-            go.GetComponent<Renderer>().material.color = army.color;
+            go.GetComponentInChildren<Warrior>().army = army;
+            go.GetComponentInChildren<Warrior>().settings = settings;
+            go.GetComponentInChildren<Renderer>().material.color = army.color;
 
             army.warriors.Add(go.GetComponent<Warrior>());
         }
@@ -47,14 +46,11 @@ public class BattleManager : MonoBehaviour
         for ( int i = 0; i < settings.archerCount; i++ )
         {
             GameObject go = Object.Instantiate(archerPrefab.gameObject);
-            Vector3 pos = Vector3.zero;
-            pos.x = Random.Range( instanceBounds.min.x, instanceBounds.max.x );
-            pos.z = Random.Range( instanceBounds.min.z, instanceBounds.max.z );
-            go.transform.position = pos;
+            go.transform.position = Utils.GetRandomPosInBounds(instanceBounds);
 
-            go.GetComponent<Archer>().allyArmy = army;
-            go.GetComponent<Archer>().settings = settings;
-            go.GetComponent<Renderer>().material.color = army.color;
+            go.GetComponentInChildren<Archer>().army = army;
+            go.GetComponentInChildren<Archer>().settings = settings;
+            go.GetComponentInChildren<Renderer>().material.color = army.color;
 
             army.archers.Add(go.GetComponent<Archer>());
         }
@@ -65,7 +61,10 @@ public class BattleManager : MonoBehaviour
         instance = this;
 
         army1.color = army1Color;
+        army1.enemyArmy = army2;
+
         army2.color = army2Color;
+        army2.enemyArmy = army1;
 
         InstanceArmy(settings.army1Settings, army1, leftArmySpawnBounds.bounds);
         InstanceArmy(settings.army2Settings, army2, rightArmySpawnBounds.bounds);
@@ -73,14 +72,19 @@ public class BattleManager : MonoBehaviour
 
     void Update()
     {
-        if ( army1.GetUnits().Count == 0 )
+        if ( army1.GetUnits().Count == 0 || army2.GetUnits().Count == 0 )
         {
-            Debug.Log("Army 2 wins!!");
+            gameOverMenu.gameObject.SetActive(true);
+            gameOverMenu.Populate();
         }
 
-        if ( army2.GetUnits().Count == 0 )
-        {
-            Debug.Log("Army 1 wins!!");
-        }
+        Vector3 mainCenter = Utils.GetCenter(army1.GetUnits()) + Utils.GetCenter(army2.GetUnits());
+        mainCenter *= 0.5f;
+
+        forwardTarget = (mainCenter - Camera.main.transform.position).normalized;
+
+        Camera.main.transform.forward += (forwardTarget - Camera.main.transform.forward) * 0.1f;
     }
+
+    private Vector3 forwardTarget;
 }

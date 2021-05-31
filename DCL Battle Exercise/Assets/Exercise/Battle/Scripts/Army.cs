@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Army
 {
+    public Army enemyArmy;
     public Color color;
     public List<Warrior> warriors = new List<Warrior>();
     public List<Archer> archers = new List<Archer>();

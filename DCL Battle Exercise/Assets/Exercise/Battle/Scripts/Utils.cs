@@ -4,6 +4,14 @@ using UnityEngine;
 
 public static class Utils
 {
+    public static Vector3 GetRandomPosInBounds(Bounds bounds)
+    {
+        Vector3 pos = Vector3.zero;
+        pos.x = Random.Range( bounds.min.x, bounds.max.x );
+        pos.z = Random.Range( bounds.min.z, bounds.max.z );
+        return pos;
+    }
+
     public static Vector3 GetCenter<T>( List<T> objects )
         where T : Component
     {
