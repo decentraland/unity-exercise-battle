@@ -15,6 +15,6 @@ public class LaunchMenu : MonoBehaviour
 
     void OnStart()
     {
-        SceneManager.LoadScene("Exercise/Scenes/Battle");
+        SceneManager.LoadScene(1);
     }
 }

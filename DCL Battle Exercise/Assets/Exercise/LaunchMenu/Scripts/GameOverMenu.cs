@@ -30,6 +30,6 @@ public class GameOverMenu : MonoBehaviour
 
     void GoToMenu()
     {
-        SceneManager.LoadScene("Exercise/Scenes/LaunchMenu");
+        SceneManager.LoadScene(0);
     }
 }
