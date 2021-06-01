@@ -1,5 +1,7 @@
 # Battle Simulator
 
+![](Battle.gif)
+
 In this simulator, armies of varying units and sizes will battle using a set of very simple AI strategies.
 
 ## Launch Menu
