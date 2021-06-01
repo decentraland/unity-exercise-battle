@@ -120,10 +120,10 @@ public abstract class UnitBase : MonoBehaviour
         {
             float dist = Vector3.Distance(gameObject.transform.position, obj.transform.position);
 
-            if ( dist < 3.0f )
+            if ( dist < 2f )
             {
                 Vector3 toNearest = (obj.transform.position - transform.position).normalized;
-                transform.position -= toNearest * (3.0f - dist);
+                transform.position -= toNearest * (2.0f - dist);
             }
         }
     }
