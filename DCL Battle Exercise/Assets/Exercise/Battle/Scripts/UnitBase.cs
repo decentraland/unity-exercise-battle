@@ -15,7 +15,7 @@ public abstract class UnitBase : MonoBehaviour
     public Army army;
 
     [NonSerialized]
-    public BattleSettings.ArmySettings settings;
+    public IArmyModel armyModel;
 
     protected float attackCooldown;
     private Vector3 lastPosition;
@@ -80,12 +80,12 @@ public abstract class UnitBase : MonoBehaviour
 
         UpdateBasicRules(allies, enemies);
 
-        switch ( settings.armyStrategy )
+        switch ( armyModel.strategy )
         {
-            case BattleSettings.ArmyStrategy.StrategyDefensive:
+            case ArmyStrategy.Defensive:
                 UpdateDefensive(allies, enemies);
                 break;
-            case BattleSettings.ArmyStrategy.StrategyBasic:
+            case ArmyStrategy.Basic:
                 UpdateBasic(allies, enemies);
                 break;
         }
