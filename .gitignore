@@ -8,3 +8,24 @@ Library/
 /obj/
 [Bb]uild/
 Logs/
+
+# ===================================== #
+# Visual Studio / MonoDevelop / Rider   #
+# ===================================== #
+ExportedObj/
+.vs/
+.vscode/
+.idea/
+Assets/Plugins/Editor/JetBrains.meta
+Assets/Plugins/Editor/JetBrains/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln
+*.user
+*.unityproj
+*.booproj
+*.tmproj
+*.dwlt
