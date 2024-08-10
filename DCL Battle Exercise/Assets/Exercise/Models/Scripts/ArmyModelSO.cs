@@ -7,9 +7,10 @@ using UnityEngine;
 /// therefore the usage of ReadOnlyAttribute
 /// </summary>
 [CreateAssetMenu(menuName = "Create ArmyModel", fileName = "ArmyModel", order = 0)]
-public class ArmyModelSO : ScriptableObject, IArmyModel
+public sealed class ArmyModelSO : ScriptableObject, IArmyModel
 {
     [ReadOnlyAttribute, SerializeField] private int warriorsValue = 100;
+
     public int warriors
     {
         get => warriorsValue;
@@ -17,6 +18,7 @@ public class ArmyModelSO : ScriptableObject, IArmyModel
     }
 
     [ReadOnlyAttribute, SerializeField] private int archersValue = 100;
+
     public int archers
     {
         get => archersValue;
@@ -24,6 +26,7 @@ public class ArmyModelSO : ScriptableObject, IArmyModel
     }
 
     [ReadOnlyAttribute, SerializeField] private ArmyStrategy strategyValue = ArmyStrategy.Basic;
+
     public ArmyStrategy strategy
     {
         get => strategyValue;

@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using TMPro;
 
-public class EnumDropdownWrapper<T> : IDisposable where T : Enum  
+public sealed class EnumDropdownWrapper<T> : IDisposable where T : Enum
 {
     public Action<T> OnValueChanged;
 
@@ -15,7 +15,7 @@ public class EnumDropdownWrapper<T> : IDisposable where T : Enum
     {
         this.dropdown = dropdown;
         nameToIndex = new ReadOnlyDictionary<string, int>(Enum.GetNames(typeof(T))
-            .Select((name,index) => (name,index))
+            .Select((name, index) => (name, index))
             .ToDictionary(x => x.name, x => x.index));
 
         dropdown.ClearOptions();

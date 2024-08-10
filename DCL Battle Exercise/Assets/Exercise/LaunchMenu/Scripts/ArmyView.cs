@@ -7,7 +7,7 @@ public interface IArmyView
     void UpdateWithModel(IArmyModel model);
 }
 
-public class ArmyView : MonoBehaviour, IArmyView
+public sealed class ArmyView : MonoBehaviour, IArmyView
 {
     [SerializeField] private Slider warriorsCount;
     [SerializeField] private TextMeshProUGUI warriorsLabel;

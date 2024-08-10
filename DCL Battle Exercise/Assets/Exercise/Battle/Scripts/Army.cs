@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Army
+public sealed class Army
 {
     public Army enemyArmy;
     public Color color;

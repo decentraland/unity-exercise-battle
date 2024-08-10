@@ -5,7 +5,7 @@ public interface IArmyPresenter
     void UpdateStrategy(ArmyStrategy strategy);
 }
 
-public class ArmyPresenter : IArmyPresenter
+public sealed class ArmyPresenter : IArmyPresenter
 {
     private readonly IArmyModel model;
     private readonly IArmyView view;

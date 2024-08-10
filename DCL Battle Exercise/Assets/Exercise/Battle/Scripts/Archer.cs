@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Archer : UnitBase
+public sealed class Archer : UnitBase
 {
     public float attackRange = 20f;
 

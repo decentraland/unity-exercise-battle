@@ -2,13 +2,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LaunchMenu : MonoBehaviour
+public sealed class LaunchMenu : MonoBehaviour
 {
     [SerializeField] private Button startButton;
     [SerializeField] private ArmyModelSO army1Model;
     [SerializeField] private ArmyModelSO army2Model;
-    [SerializeField]private ArmyView army1View;
-    [SerializeField]private ArmyView army2View;
+    [SerializeField] private ArmyView army1View;
+    [SerializeField] private ArmyView army2View;
 
     private ArmyPresenter army1Presenter;
     private ArmyPresenter army2Presenter;

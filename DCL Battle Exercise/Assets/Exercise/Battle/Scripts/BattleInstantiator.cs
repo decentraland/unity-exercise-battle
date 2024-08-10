@@ -3,27 +3,21 @@ using UnityEditor;
 using UnityEngine;
 
 
-public class BattleInstantiator : MonoBehaviour
+public sealed class BattleInstantiator : MonoBehaviour
 {
     public static BattleInstantiator instance { get; private set; }
 
-    [SerializeField]
-    private ArmyModelSO army1Model;
+    [SerializeField] private ArmyModelSO army1Model;
 
-    [SerializeField]
-    private ArmyModelSO army2Model;
+    [SerializeField] private ArmyModelSO army2Model;
 
-    [SerializeField]
-    private Warrior warriorPrefab;
+    [SerializeField] private Warrior warriorPrefab;
 
-    [SerializeField]
-    private Archer archerPrefab;
+    [SerializeField] private Archer archerPrefab;
 
-    [SerializeField]
-    private BoxCollider leftArmySpawnBounds;
+    [SerializeField] private BoxCollider leftArmySpawnBounds;
 
-    [SerializeField]
-    private BoxCollider rightArmySpawnBounds;
+    [SerializeField] private BoxCollider rightArmySpawnBounds;
 
     public readonly Army army1 = new Army();
     public readonly Army army2 = new Army();
@@ -35,7 +29,7 @@ public class BattleInstantiator : MonoBehaviour
 
     void InstanceArmy(IArmyModel model, Army army, Bounds instanceBounds)
     {
-        for ( int i = 0; i < model.warriors; i++ )
+        for (int i = 0; i < model.warriors; i++)
         {
             GameObject go = Instantiate(warriorPrefab.gameObject);
             go.transform.position = Utils.GetRandomPosInBounds(instanceBounds);
@@ -47,7 +41,7 @@ public class BattleInstantiator : MonoBehaviour
             army.warriors.Add(go.GetComponent<Warrior>());
         }
 
-        for ( int i = 0; i < model.archers; i++ )
+        for (int i = 0; i < model.archers; i++)
         {
             GameObject go = Object.Instantiate(archerPrefab.gameObject);
             go.transform.position = Utils.GetRandomPosInBounds(instanceBounds);
@@ -76,7 +70,7 @@ public class BattleInstantiator : MonoBehaviour
 
     void Update()
     {
-        if ( army1.GetUnits().Count == 0 || army2.GetUnits().Count == 0 )
+        if (army1.GetUnits().Count == 0 || army2.GetUnits().Count == 0)
         {
             gameOverMenu.gameObject.SetActive(true);
             gameOverMenu.Populate();
