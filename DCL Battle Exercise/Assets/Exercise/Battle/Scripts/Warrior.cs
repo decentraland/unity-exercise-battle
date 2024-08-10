@@ -40,7 +40,7 @@ public sealed class Warrior : UnitBase
     
     protected override void UpdateDefensive(List<GameObject> allies, List<GameObject> enemies)
     {
-        var enemyCenter = Utils.GetCenter(enemies);
+        var enemyCenter = army.enemyArmy.center;
 
         if (Mathf.Abs(enemyCenter.x - transform.position.x) > 20)
         {

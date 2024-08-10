@@ -60,3 +60,4 @@ https://github.com/imranzaidiedu:
 FPS on M3 Pro:
 - 5.3 in the beginning
 - 12.5 after reduce allocations and add caching on hotpaths
+- 14.5 after avoid re-computing armies' center points per unit

@@ -5,7 +5,7 @@ public sealed class Army
 {
     public Army enemyArmy;
     public Color color;
-
+    public Vector3 center = Vector3.zero;
     public List<GameObject> Units { get; } = new();
     public List<Archer> Archers { get; } = new();
     public List<Warrior> Warriors { get; } = new();

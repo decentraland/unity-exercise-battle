@@ -44,7 +44,7 @@ public sealed class Archer : UnitBase
     
     protected override void UpdateDefensive(List<GameObject> allies, List<GameObject> enemies)
     {
-        var enemyCenter = Utils.GetCenter(enemies);
+        var enemyCenter = army.enemyArmy.center;
         var distToEnemyX = Mathf.Abs(enemyCenter.x - transform.position.x);
 
         if (distToEnemyX > attackRange)

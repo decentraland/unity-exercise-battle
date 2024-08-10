@@ -114,18 +114,16 @@ public abstract class UnitBase : MonoBehaviour
 
     private void EvadeAllies()
     {
-        var allUnits = army.Units;
-        var center = Utils.GetCenter(allUnits);
-        var centerDist = Vector3.Distance(gameObject.transform.position, center);
+        var centerDist = Vector3.Distance(gameObject.transform.position, army.center);
 
         if (centerDist > 80.0f)
         {
-            var toNearest = (center - transform.position).normalized;
+            var toNearest = (army.center - transform.position).normalized;
             transform.position -= toNearest * (80.0f - centerDist);
             return;
         }
 
-        foreach (var unit in allUnits)
+        foreach (var unit in army.Units)
         {
             var dist = Vector3.Distance(gameObject.transform.position, unit.transform.position);
             if (!(dist < 2f)) continue;

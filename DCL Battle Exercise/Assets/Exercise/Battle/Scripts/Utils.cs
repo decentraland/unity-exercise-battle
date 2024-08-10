@@ -6,7 +6,7 @@ public static class Utils
 {
     public static Vector3 GetRandomPosInBounds(Bounds bounds)
     {
-        Vector3 pos = Vector3.zero;
+        var pos = Vector3.zero;
         pos.x = Random.Range(bounds.min.x, bounds.max.x);
         pos.z = Random.Range(bounds.min.z, bounds.max.z);
         return pos;

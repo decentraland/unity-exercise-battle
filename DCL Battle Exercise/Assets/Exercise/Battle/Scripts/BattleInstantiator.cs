@@ -77,8 +77,11 @@ public sealed class BattleInstantiator : MonoBehaviour
             gameOverMenu.gameObject.SetActive(true);
             gameOverMenu.Populate();
         }
+        
+        army1.center = Utils.GetCenter(army1.Units);
+        army2.center = Utils.GetCenter(army2.Units);
 
-        var mainCenter = Utils.GetCenter(army1.Units) + Utils.GetCenter(army2.Units);
+        var mainCenter = army1.center + army2.center;
         mainCenter *= 0.5f;
 
         forwardTarget = (mainCenter - camera.position).normalized;
