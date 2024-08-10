@@ -6,10 +6,10 @@ Review current code and plan to refactor for Battle simulator.
 
 High level plan to be updated continuously.
 
-- [ ] Review readme and code and criteria => any unimplemented rules? any misunderstood rules?
-- [ ] Review forks
-- [ ] Make plan, while keep track of fps per changes
-- [ ] Low hanging first, 1d to make game playable first
+- [x] Review readme and code and criteria => any unimplemented rules? any misunderstood rules?
+- [x] Review forks
+- [x] Make plan, while keep track of fps per changes
+- [x] Low hanging first, 1d to make game playable first
 - [ ] Structural changes with edition, extension in mind
 - [ ] Unit testing with new structure changes
 - [ ] Edition/Tooling
@@ -26,21 +26,23 @@ High level plan to be updated continuously.
 - [ ] no separation of renderer logic and simulation logic
 - [ ] project structure is by feature which is good (when we add hundreds) but would be difficult for artists (non-code) => assets related should be separated from code, while keeping by feature organization
 - [ ] no namespace
-- [ ] use of linq, GetComponentInChildren, MonoBehavior for units
+- [x] use of linq, GetComponentInChildren, MonoBehavior for units in hotpaths
 - [x] not sealed
+- [ ] not good encapsulation, i.e. unnecessary visibility of public fields (use private SerializedField instead)
 - [ ] not making use of record
-- [ ] access to Camera.main, animator not cached in hotpath
+- [x] access to Camera.main, animator not cached in hotpath
 - [ ] Update loop on units versus one main loop
-- [ ] GetUnits on hotpaths with lot of allocation => at least reuse vector
-- [ ] hot path if ( army1.GetUnits().Count == 0 || army2.GetUnits().Count == 0 ) check on destroy instead
-- [ ] algos to be reviewed
+- [x] GetUnits on hotpaths with lot of allocation => at least reuse vector
+- [x] hot path if ( army1.GetUnits().Count == 0 || army2.GetUnits().Count == 0 ) check on destroy instead
+- [ ] algos to be reviewed => update for all units contains many loops through elements that kill performance
 - [ ] hard coded switch with singleton BattleInstantiator.instance.army1Color;
 - [ ] public enum ArmyStrategy could be extended using int
 - [ ] no addressable/resource management => Object.Instantiate serialized prefab link
 - [ ] no test unit
 - [ ] no fps view on device (use ‘stats’ in editor)
-- [ ] seems to not have autoformat in place, body expression
-- [ ] seems to use both var and explicite type => if no rules then let's go with var (and Rider suggestions)
+- [ ] public, protected and private naming convention: potentially non public with prefix _ since we still use MonoBehavior here
+- [x] seems to not have autoformat in place, to body expression, explit modifiers
+- [x] seems to use both var and explicite type => if no rules then let's go with var (and Rider suggestions)
 
 ### Forks
 
@@ -57,7 +59,9 @@ https://github.com/imranzaidiedu:
 
 ### Performance tracking
 
-FPS on M3 Pro:
+FPS on M3 Pro in editor:
+
 - 5.3 in the beginning
 - 12.5 after reduce allocations and add caching on hotpaths
 - 14.5 after avoid re-computing armies' center points per unit
+- 18.9 after more caching

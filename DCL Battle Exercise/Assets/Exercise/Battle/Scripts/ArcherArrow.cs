@@ -1,35 +1,37 @@
 using System;
 using UnityEngine;
 
-public sealed class ArcherArrow : MonoBehaviour
+namespace Exercise.Battle.Scripts
 {
-    public float speed;
-
-    [NonSerialized] public Vector3 target;
-    [NonSerialized] public float attack;
-
-    public Army army;
-
-    public void Update()
+    public sealed class ArcherArrow : MonoBehaviour
     {
-        var direction = (target - transform.position).normalized;
-        transform.position += direction * speed;
-        transform.forward = direction;
+        public float speed;
 
-        foreach (var unitGo in army.enemyArmy.Units)
+        [NonSerialized] public Vector3 Target;
+        [NonSerialized] public float Attack;
+        public Army Army;
+
+        public void Update()
         {
-            var dist = Vector3.Distance(unitGo.transform.position, transform.position);
+            var direction = (Target - transform.position).normalized;
+            transform.position += direction * speed;
+            transform.forward = direction;
 
-            if (!(dist < speed)) continue;
-            var unit = unitGo.GetComponent<UnitBase>();
-            unit.Hit(gameObject);
-            army.Pool.ReleaseObject(gameObject);
-            return;
-        }
+            foreach (var unitGo in Army.EnemyArmy.Units)
+            {
+                var dist = Vector3.Distance(unitGo.transform.position, transform.position);
 
-        if (Vector3.Distance(transform.position, target) < speed)
-        {
-            Destroy(gameObject);
+                if (!(dist < speed)) continue;
+                var unit = unitGo.GetComponent<UnitBase>();
+                unit.Hit(gameObject);
+                Army.Pool.ReleaseObject(gameObject);
+                return;
+            }
+
+            if (Vector3.Distance(transform.position, Target) < speed)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

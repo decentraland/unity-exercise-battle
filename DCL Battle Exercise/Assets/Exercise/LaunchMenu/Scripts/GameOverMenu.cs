@@ -1,27 +1,31 @@
+using Exercise.Battle.Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public sealed class GameOverMenu : MonoBehaviour
+namespace Exercise.LaunchMenu.Scripts
 {
-    public TextMeshProUGUI armyWins;
-    public Button goToMenu;
-
-    public void Populate()
+    public sealed class GameOverMenu : MonoBehaviour
     {
-        if (BattleInstantiator.instance.Army1.Units.Count == 0)
+        public TextMeshProUGUI armyWins;
+        public Button goToMenu;
+
+        public void Populate()
         {
-            armyWins.text = "Army 1 wins!";
+            if (BattleInstantiator.instance.Army1.Units.Count == 0)
+            {
+                armyWins.text = "Army 1 wins!";
+            }
+
+            if (BattleInstantiator.instance.Army2.Units.Count == 0)
+            {
+                armyWins.text = "Army 2 wins!";
+            }
         }
 
-        if (BattleInstantiator.instance.Army2.Units.Count == 0)
-        {
-            armyWins.text = "Army 2 wins!";
-        }
+        void Awake() => goToMenu.onClick.AddListener(GoToMenu);
+
+        void GoToMenu() => SceneManager.LoadScene(0);
     }
-
-    void Awake() => goToMenu.onClick.AddListener(GoToMenu);
-
-    void GoToMenu() => SceneManager.LoadScene(0);
 }

@@ -1,12 +1,15 @@
-public interface IArmyModel
+namespace Exercise.Models.Scripts
 {
-    int warriors { get; set; }
-    int archers { get; set; }
-    ArmyStrategy strategy { get; set; }
-}
+    public interface IArmyModel
+    {
+        int warriors { get; set; }
+        int archers { get; set; }
+        ArmyStrategy strategy { get; set; }
+    }
 
-public enum ArmyStrategy
-{
-    Basic = 0,
-    Defensive = 1
+    public enum ArmyStrategy
+    {
+        Basic = 0,
+        Defensive = 1
+    }
 }

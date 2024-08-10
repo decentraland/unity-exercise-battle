@@ -3,48 +3,51 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using TMPro;
 
-public sealed class EnumDropdownWrapper<T> : IDisposable where T : Enum
+namespace Exercise.Utils
 {
-    public Action<T> OnValueChanged;
-
-    private readonly TMP_Dropdown dropdown;
-
-    private readonly ReadOnlyDictionary<string, int> nameToIndex;
-
-    public EnumDropdownWrapper(TMP_Dropdown dropdown)
+    public sealed class EnumDropdownWrapper<T> : IDisposable where T : Enum
     {
-        this.dropdown = dropdown;
-        nameToIndex = new ReadOnlyDictionary<string, int>(Enum.GetNames(typeof(T))
-            .Select((name, index) => (name, index))
-            .ToDictionary(x => x.name, x => x.index));
+        public Action<T> OnValueChanged;
 
-        dropdown.ClearOptions();
-        dropdown.AddOptions(nameToIndex.Keys.ToList());
-        dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
-    }
+        private readonly TMP_Dropdown dropdown;
 
-    public T Value()
-    {
-        return (T)Enum.GetValues(typeof(T)).GetValue(dropdown.value);
-    }
+        private readonly ReadOnlyDictionary<string, int> nameToIndex;
 
-    public void SetValueWithoutNotify(T value)
-    {
-        dropdown.SetValueWithoutNotify(EnumToIndex(value));
-    }
+        public EnumDropdownWrapper(TMP_Dropdown dropdown)
+        {
+            this.dropdown = dropdown;
+            nameToIndex = new ReadOnlyDictionary<string, int>(Enum.GetNames(typeof(T))
+                .Select((name, index) => (name, index))
+                .ToDictionary(x => x.name, x => x.index));
 
-    private void OnDropdownValueChanged(int index)
-    {
-        OnValueChanged?.Invoke((T)Enum.GetValues(typeof(T)).GetValue(index));
-    }
+            dropdown.ClearOptions();
+            dropdown.AddOptions(nameToIndex.Keys.ToList());
+            dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
+        }
 
-    private int EnumToIndex(T value)
-    {
-        return nameToIndex[value.ToString()];
-    }
+        public T Value()
+        {
+            return (T)Enum.GetValues(typeof(T)).GetValue(dropdown.value);
+        }
 
-    public void Dispose()
-    {
-        dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
+        public void SetValueWithoutNotify(T value)
+        {
+            dropdown.SetValueWithoutNotify(EnumToIndex(value));
+        }
+
+        private void OnDropdownValueChanged(int index)
+        {
+            OnValueChanged?.Invoke((T)Enum.GetValues(typeof(T)).GetValue(index));
+        }
+
+        private int EnumToIndex(T value)
+        {
+            return nameToIndex[value.ToString()];
+        }
+
+        public void Dispose()
+        {
+            dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
+        }
     }
 }

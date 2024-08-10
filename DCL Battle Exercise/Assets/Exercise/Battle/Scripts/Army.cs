@@ -1,37 +1,41 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class Army
+namespace Exercise.Battle.Scripts
 {
-    public Army enemyArmy;
-    public Color color;
-    public Vector3 center = Vector3.zero;
-    public GameObjectPool Pool;
-    public List<GameObject> Units { get; } = new();
-    private List<Archer> Archers { get; } = new();
-    private List<Warrior> Warriors { get; } = new();
-
-    public void Add(Warrior warrior)
+    public sealed class Army
     {
-        Warriors.Add(warrior);
-        Units.Add(warrior.gameObject);
-    }
+        public Army EnemyArmy;
+        public Color Color;
+        public Vector3 Center = Vector3.zero;
+        public GameObjectPool Pool;
+        public List<GameObject> Units { get; } = new();
 
-    public void Remove(Warrior warrior)
-    {
-        Warriors.Remove(warrior);
-        Units.Remove(warrior.gameObject);
-    }
+        private List<Archer> _archers { get; } = new();
+        private List<Warrior> _warriors { get; } = new();
 
-    public void Add(Archer archer)
-    {
-        Archers.Add(archer);
-        Units.Add(archer.gameObject);
-    }
+        public void Add(Warrior warrior)
+        {
+            _warriors.Add(warrior);
+            Units.Add(warrior.gameObject);
+        }
 
-    public void Remove(Archer archer)
-    {
-        Archers.Remove(archer);
-        Units.Remove(archer.gameObject);
+        public void Remove(Warrior warrior)
+        {
+            _warriors.Remove(warrior);
+            Units.Remove(warrior.gameObject);
+        }
+
+        public void Add(Archer archer)
+        {
+            _archers.Add(archer);
+            Units.Add(archer.gameObject);
+        }
+
+        public void Remove(Archer archer)
+        {
+            _archers.Remove(archer);
+            Units.Remove(archer.gameObject);
+        }
     }
 }
