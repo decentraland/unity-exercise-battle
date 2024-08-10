@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public abstract class UnitBase : MonoBehaviour
@@ -14,19 +13,17 @@ public abstract class UnitBase : MonoBehaviour
 
     public Army army;
 
-    [NonSerialized]
-    public IArmyModel armyModel;
+    [NonSerialized] public IArmyModel armyModel;
 
     protected float attackCooldown;
     private Vector3 lastPosition;
 
     public abstract void Attack(GameObject enemy);
 
-
     protected abstract void UpdateDefensive(List<GameObject> allies, List<GameObject> enemies);
     protected abstract void UpdateBasic(List<GameObject> allies, List<GameObject> enemies);
 
-    public virtual void Move( Vector3 delta )
+    public virtual void Move(Vector3 delta)
     {
         if (attackCooldown > maxAttackCooldown - postAttackDelay)
             return;
@@ -34,32 +31,27 @@ public abstract class UnitBase : MonoBehaviour
         transform.position += delta * speed;
     }
 
-    public virtual void Hit( GameObject sourceGo )
+    public virtual void Hit(GameObject sourceGo)
     {
-        UnitBase source = sourceGo.GetComponent<UnitBase>();
+        var source = sourceGo.GetComponent<UnitBase>();
         float sourceAttack = 0;
 
-        if ( source != null )
+        if (source != null)
         {
             sourceAttack = source.attack;
         }
         else
         {
-            ArcherArrow arrow = sourceGo.GetComponent<ArcherArrow>();
+            var arrow = sourceGo.GetComponent<ArcherArrow>();
             sourceAttack = arrow.attack;
         }
 
         health -= Mathf.Max(sourceAttack - defense, 0);
 
-        if ( health < 0 )
+        if (health < 0)
         {
             transform.forward = sourceGo.transform.position - transform.position;
-
-            if ( this is Warrior )
-                army.warriors.Remove(this as Warrior);
-            else if ( this is Archer )
-                army.archers.Remove(this as Archer);
-
+            Remove();
             var animator = GetComponentInChildren<Animator>();
             animator?.SetTrigger("Death");
         }
@@ -70,17 +62,36 @@ public abstract class UnitBase : MonoBehaviour
         }
     }
 
+    protected void Kill()
+    {
+        Remove();
+        Destroy(gameObject);
+    }
+
+    private void Remove()
+    {
+        switch (this)
+        {
+            case Warrior:
+                army.Remove(this as Warrior);
+                break;
+            case Archer:
+                army.Remove(this as Archer);
+                break;
+        }
+    }
+
     private void Update()
     {
-        if ( health < 0 )
+        if (health < 0)
             return;
 
-        List<GameObject> allies = army.GetUnits();
-        List<GameObject> enemies = army.enemyArmy.GetUnits();
+        UpdateBasicRules();
 
-        UpdateBasicRules(allies, enemies);
+        var allies = army.Units;
+        var enemies = army.enemyArmy.Units;
 
-        switch ( armyModel.strategy )
+        switch (armyModel.strategy)
         {
             case ArmyStrategy.Defensive:
                 UpdateDefensive(allies, enemies);
@@ -95,36 +106,31 @@ public abstract class UnitBase : MonoBehaviour
         lastPosition = transform.position;
     }
 
-    void UpdateBasicRules(List<GameObject> allies, List<GameObject> enemies)
+    private void UpdateBasicRules()
     {
         attackCooldown -= Time.deltaTime;
-        EvadeAllies(allies);
+        EvadeAllies();
     }
 
-    void EvadeAllies(List<GameObject> allies)
+    private void EvadeAllies()
     {
-        var allUnits = army.GetUnits().Union(army.enemyArmy.GetUnits()).ToList();
+        var allUnits = army.Units;
+        var center = Utils.GetCenter(allUnits);
+        var centerDist = Vector3.Distance(gameObject.transform.position, center);
 
-        Vector3 center = Utils.GetCenter(allUnits);
-
-        float centerDist = Vector3.Distance(gameObject.transform.position, center);
-
-        if ( centerDist > 80.0f )
+        if (centerDist > 80.0f)
         {
-            Vector3 toNearest = (center - transform.position).normalized;
+            var toNearest = (center - transform.position).normalized;
             transform.position -= toNearest * (80.0f - centerDist);
             return;
         }
 
-        foreach ( var obj in allUnits )
+        foreach (var unit in allUnits)
         {
-            float dist = Vector3.Distance(gameObject.transform.position, obj.transform.position);
-
-            if ( dist < 2f )
-            {
-                Vector3 toNearest = (obj.transform.position - transform.position).normalized;
-                transform.position -= toNearest * (2.0f - dist);
-            }
+            var dist = Vector3.Distance(gameObject.transform.position, unit.transform.position);
+            if (!(dist < 2f)) continue;
+            var toNearest = (unit.transform.position - transform.position).normalized;
+            transform.position -= toNearest * (2.0f - dist);
         }
     }
 }

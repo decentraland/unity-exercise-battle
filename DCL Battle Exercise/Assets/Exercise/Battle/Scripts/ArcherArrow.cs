@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class ArcherArrow : MonoBehaviour
@@ -14,24 +12,22 @@ public sealed class ArcherArrow : MonoBehaviour
 
     public void Update()
     {
-        Vector3 direction = (target - transform.position).normalized;
+        var direction = (target - transform.position).normalized;
         transform.position += direction * speed;
         transform.forward = direction;
 
-        foreach ( var a in army.enemyArmy.GetUnits() )
+        foreach (var unitGo in army.enemyArmy.Units)
         {
-            float dist = Vector3.Distance(a.transform.position, transform.position);
+            var dist = Vector3.Distance(unitGo.transform.position, transform.position);
 
-            if (dist < speed)
-            {
-                UnitBase unit = a.GetComponent<UnitBase>();
-                unit.Hit(gameObject);
-                Destroy(gameObject);
-                return;
-            }
+            if (!(dist < speed)) continue;
+            var unit = unitGo.GetComponent<UnitBase>();
+            unit.Hit(gameObject);
+            Destroy(gameObject);
+            return;
         }
 
-        if ( Vector3.Distance(transform.position, target) < speed)
+        if (Vector3.Distance(transform.position, target) < speed)
         {
             Destroy(gameObject);
         }

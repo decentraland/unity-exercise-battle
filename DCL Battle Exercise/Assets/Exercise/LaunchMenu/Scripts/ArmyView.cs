@@ -26,10 +26,8 @@ public sealed class ArmyView : MonoBehaviour, IArmyView
         enumDropdown.OnValueChanged += OnStrategyChanged;
     }
 
-    public void BindPresenter(IArmyPresenter presenter)
-    {
-        this.presenter = presenter;
-    }
+    public void BindPresenter(IArmyPresenter presenter) => this.presenter = presenter;
+
 
     public void UpdateWithModel(IArmyModel model)
     {
@@ -52,10 +50,7 @@ public sealed class ArmyView : MonoBehaviour, IArmyView
         archersLabel.text = ((int)value).ToString();
     }
 
-    private void OnStrategyChanged(ArmyStrategy strategy)
-    {
-        presenter?.UpdateStrategy(strategy);
-    }
+    private void OnStrategyChanged(ArmyStrategy strategy) => presenter?.UpdateStrategy(strategy);
 
     private void OnDestroy()
     {

@@ -17,18 +17,9 @@ public sealed class ArmyPresenter : IArmyPresenter
         this.view.UpdateWithModel(model);
     }
 
-    public void UpdateWarriors(int warriors)
-    {
-        model.warriors = warriors;
-    }
+    public void UpdateWarriors(int warriors) => model.warriors = warriors;
 
-    public void UpdateArchers(int archers)
-    {
-        model.archers = archers;
-    }
+    public void UpdateArchers(int archers) => model.archers = archers;
 
-    public void UpdateStrategy(ArmyStrategy strategy)
-    {
-        model.strategy = strategy;
-    }
+    public void UpdateStrategy(ArmyStrategy strategy) => model.strategy = strategy;
 }

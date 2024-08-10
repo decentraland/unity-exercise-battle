@@ -1,5 +1,3 @@
-using System.Collections;
-using UnityEditor;
 using UnityEngine;
 
 
@@ -27,6 +25,8 @@ public sealed class BattleInstantiator : MonoBehaviour
 
     public GameOverMenu gameOverMenu;
 
+    private Transform camera;
+
     void InstanceArmy(IArmyModel model, Army army, Bounds instanceBounds)
     {
         for (int i = 0; i < model.warriors; i++)
@@ -38,7 +38,7 @@ public sealed class BattleInstantiator : MonoBehaviour
             go.GetComponentInChildren<Warrior>().armyModel = model;
             go.GetComponentInChildren<Renderer>().material.color = army.color;
 
-            army.warriors.Add(go.GetComponent<Warrior>());
+            army.Add(go.GetComponent<Warrior>());
         }
 
         for (int i = 0; i < model.archers; i++)
@@ -50,7 +50,7 @@ public sealed class BattleInstantiator : MonoBehaviour
             go.GetComponentInChildren<Archer>().armyModel = model;
             go.GetComponentInChildren<Renderer>().material.color = army.color;
 
-            army.archers.Add(go.GetComponent<Archer>());
+            army.Add(go.GetComponent<Archer>());
         }
     }
 
@@ -66,22 +66,24 @@ public sealed class BattleInstantiator : MonoBehaviour
 
         InstanceArmy(army1Model, army1, leftArmySpawnBounds.bounds);
         InstanceArmy(army2Model, army2, rightArmySpawnBounds.bounds);
+
+        camera = Camera.main.transform;
     }
 
     void Update()
     {
-        if (army1.GetUnits().Count == 0 || army2.GetUnits().Count == 0)
+        if (army1.Units.Count == 0 || army2.Units.Count == 0)
         {
             gameOverMenu.gameObject.SetActive(true);
             gameOverMenu.Populate();
         }
 
-        Vector3 mainCenter = Utils.GetCenter(army1.GetUnits()) + Utils.GetCenter(army2.GetUnits());
+        var mainCenter = Utils.GetCenter(army1.Units) + Utils.GetCenter(army2.Units);
         mainCenter *= 0.5f;
 
-        forwardTarget = (mainCenter - Camera.main.transform.position).normalized;
+        forwardTarget = (mainCenter - camera.position).normalized;
 
-        Camera.main.transform.forward += (forwardTarget - Camera.main.transform.forward) * 0.1f;
+        camera.forward += (forwardTarget - camera.forward) * 0.1f;
     }
 
     private Vector3 forwardTarget;

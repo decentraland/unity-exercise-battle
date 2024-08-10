@@ -24,8 +24,5 @@ public sealed class LaunchMenu : MonoBehaviour
         army2View.BindPresenter(army2Presenter);
     }
 
-    void OnStart()
-    {
-        SceneManager.LoadScene(1);
-    }
+    void OnStart() => SceneManager.LoadScene(1);
 }

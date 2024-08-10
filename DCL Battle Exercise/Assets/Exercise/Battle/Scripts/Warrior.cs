@@ -23,7 +23,7 @@ public sealed class Warrior : UnitBase
         if (Vector3.Distance(transform.position, target.transform.position) > attackRange)
             return;
 
-        UnitBase targetUnit = target.GetComponentInChildren<UnitBase>();
+        var targetUnit = target.GetComponentInChildren<UnitBase>();
 
         if (targetUnit == null)
             return;
@@ -36,15 +36,11 @@ public sealed class Warrior : UnitBase
         targetUnit.Hit(gameObject);
     }
 
-    public void OnDeathAnimFinished()
-    {
-        Destroy(gameObject);
-    }
-
-
+    public void OnDeathAnimFinished() => Kill();
+    
     protected override void UpdateDefensive(List<GameObject> allies, List<GameObject> enemies)
     {
-        Vector3 enemyCenter = Utils.GetCenter(enemies);
+        var enemyCenter = Utils.GetCenter(enemies);
 
         if (Mathf.Abs(enemyCenter.x - transform.position.x) > 20)
         {
@@ -77,7 +73,7 @@ public sealed class Warrior : UnitBase
         if (nearestEnemy == null)
             return;
 
-        Vector3 toNearest = (nearestEnemy.transform.position - transform.position).normalized;
+        var toNearest = (nearestEnemy.transform.position - transform.position).normalized;
         toNearest.Scale(new Vector3(1, 0, 1));
         Move(toNearest.normalized);
 
