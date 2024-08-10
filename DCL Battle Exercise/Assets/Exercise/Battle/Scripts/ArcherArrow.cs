@@ -23,7 +23,7 @@ public sealed class ArcherArrow : MonoBehaviour
             if (!(dist < speed)) continue;
             var unit = unitGo.GetComponent<UnitBase>();
             unit.Hit(gameObject);
-            Destroy(gameObject);
+            army.pool.ReleaseObject(gameObject);
             return;
         }
 

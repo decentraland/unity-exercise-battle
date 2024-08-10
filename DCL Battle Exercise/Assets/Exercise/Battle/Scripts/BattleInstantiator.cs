@@ -17,23 +17,26 @@ public sealed class BattleInstantiator : MonoBehaviour
 
     [SerializeField] private BoxCollider rightArmySpawnBounds;
 
-    public readonly Army army1 = new Army();
-    public readonly Army army2 = new Army();
+    public readonly Army army1 = new();
+    public readonly Army army2 = new();
+
+    public GameObjectPool pool;
+    public ArcherArrow arrowPrefab;
 
     public Color army1Color;
     public Color army2Color;
 
     public GameOverMenu gameOverMenu;
 
-    private Transform camera;
+    private Transform cameraTransform;
 
     void InstanceArmy(IArmyModel model, Army army, Bounds instanceBounds)
     {
-        for (int i = 0; i < model.warriors; i++)
+        for (var i = 0; i < model.warriors; i++)
         {
-            GameObject go = Instantiate(warriorPrefab.gameObject);
-            go.transform.position = Utils.GetRandomPosInBounds(instanceBounds);
+            var go = Instantiate(warriorPrefab.gameObject);
 
+            go.transform.position = Utils.GetRandomPosInBounds(instanceBounds);
             go.GetComponentInChildren<Warrior>().army = army;
             go.GetComponentInChildren<Warrior>().armyModel = model;
             go.GetComponentInChildren<Renderer>().material.color = army.color;
@@ -41,9 +44,9 @@ public sealed class BattleInstantiator : MonoBehaviour
             army.Add(go.GetComponent<Warrior>());
         }
 
-        for (int i = 0; i < model.archers; i++)
+        for (var i = 0; i < model.archers; i++)
         {
-            GameObject go = Object.Instantiate(archerPrefab.gameObject);
+            var go = Object.Instantiate(archerPrefab.gameObject);
             go.transform.position = Utils.GetRandomPosInBounds(instanceBounds);
 
             go.GetComponentInChildren<Archer>().army = army;
@@ -67,7 +70,11 @@ public sealed class BattleInstantiator : MonoBehaviour
         InstanceArmy(army1Model, army1, leftArmySpawnBounds.bounds);
         InstanceArmy(army2Model, army2, rightArmySpawnBounds.bounds);
 
-        camera = Camera.main.transform;
+        pool = new GameObjectPool(arrowPrefab.gameObject, 20, 100);
+        army1.pool = pool;
+        army2.pool = pool;
+
+        cameraTransform = Camera.main.transform;
     }
 
     void Update()
@@ -77,16 +84,16 @@ public sealed class BattleInstantiator : MonoBehaviour
             gameOverMenu.gameObject.SetActive(true);
             gameOverMenu.Populate();
         }
-        
+
         army1.center = Utils.GetCenter(army1.Units);
         army2.center = Utils.GetCenter(army2.Units);
 
         var mainCenter = army1.center + army2.center;
         mainCenter *= 0.5f;
 
-        forwardTarget = (mainCenter - camera.position).normalized;
+        forwardTarget = (mainCenter - cameraTransform.position).normalized;
 
-        camera.forward += (forwardTarget - camera.forward) * 0.1f;
+        cameraTransform.forward += (forwardTarget - cameraTransform.forward) * 0.1f;
     }
 
     private Vector3 forwardTarget;

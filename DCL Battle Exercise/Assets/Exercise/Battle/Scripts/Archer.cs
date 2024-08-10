@@ -5,8 +5,6 @@ public sealed class Archer : UnitBase
 {
     public float attackRange = 20f;
 
-    public ArcherArrow arrowPrefab;
-
     void Awake()
     {
         health = 5;
@@ -25,23 +23,22 @@ public sealed class Archer : UnitBase
             return;
 
         attackCooldown = maxAttackCooldown;
-        var arrowGameObject = Object.Instantiate(arrowPrefab.gameObject);
-        var archerArrow = arrowGameObject.GetComponent<ArcherArrow>();
+        var arrowGo = army.pool.GetObject(transform.position);
+        var archerArrow = arrowGo.GetComponent<ArcherArrow>();
         archerArrow.target = enemy.transform.position;
         archerArrow.attack = attack;
         archerArrow.army = army;
-        arrowGameObject.transform.position = transform.position;
 
         var animator = GetComponentInChildren<Animator>();
         animator?.SetTrigger("Attack");
 
-        arrowGameObject.GetComponent<Renderer>().material.color = army == BattleInstantiator.instance.army1
+        arrowGo.GetComponent<Renderer>().material.color = army == BattleInstantiator.instance.army1
             ? BattleInstantiator.instance.army1Color
             : BattleInstantiator.instance.army2Color;
     }
 
     public void OnDeathAnimFinished() => Kill();
-    
+
     protected override void UpdateDefensive(List<GameObject> allies, List<GameObject> enemies)
     {
         var enemyCenter = army.enemyArmy.center;

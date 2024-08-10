@@ -9,6 +9,8 @@ public sealed class Army
     public List<GameObject> Units { get; } = new();
     public List<Archer> Archers { get; } = new();
     public List<Warrior> Warriors { get; } = new();
+    
+    public GameObjectPool pool;
 
     public void Add(Warrior warrior)
     {
