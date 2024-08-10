@@ -4,14 +4,17 @@ using UnityEngine;
 public sealed class Archer : UnitBase
 {
     public float attackRange = 20f;
+    private static readonly int AnimatorAttackIndex = Animator.StringToHash("Attack");
 
-    void Awake()
+    private void Awake()
     {
         health = 5;
         defense = 0;
         attack = 10;
         maxAttackCooldown = 5f;
         postAttackDelay = 1f;
+        _animator = GetComponentInChildren<Animator>();
+        _transform = transform;
     }
 
     public override void Attack(GameObject enemy)
@@ -23,44 +26,43 @@ public sealed class Archer : UnitBase
             return;
 
         attackCooldown = maxAttackCooldown;
-        var arrowGo = army.pool.GetObject(transform.position);
+        var arrowGo = army.Pool.GetObject(transform.position);
         var archerArrow = arrowGo.GetComponent<ArcherArrow>();
         archerArrow.target = enemy.transform.position;
         archerArrow.attack = attack;
         archerArrow.army = army;
 
-        var animator = GetComponentInChildren<Animator>();
-        animator?.SetTrigger("Attack");
+        _animator?.SetTrigger(AnimatorAttackIndex);
 
-        arrowGo.GetComponent<Renderer>().material.color = army == BattleInstantiator.instance.army1
+        arrowGo.GetComponent<Renderer>().material.color = army == BattleInstantiator.instance.Army1
             ? BattleInstantiator.instance.army1Color
             : BattleInstantiator.instance.army2Color;
     }
 
     public void OnDeathAnimFinished() => Kill();
 
-    protected override void UpdateDefensive(List<GameObject> allies, List<GameObject> enemies)
+    protected override void UpdateDefensive(List<GameObject> enemies, Vector3 toMove)
     {
         var enemyCenter = army.enemyArmy.center;
-        var distToEnemyX = Mathf.Abs(enemyCenter.x - transform.position.x);
+        _transform.position += toMove;
+        var distToEnemyX = Mathf.Abs(enemyCenter.x - _transform.position.x);
 
         if (distToEnemyX > attackRange)
         {
-            if (enemyCenter.x < transform.position.x)
+            if (enemyCenter.x < _transform.position.x)
                 Move(Vector3.left);
-
-            if (enemyCenter.x > transform.position.x)
+            if (enemyCenter.x > _transform.position.x)
                 Move(Vector3.right);
         }
 
-        var distToNearest = Utils.GetNearestObject(gameObject, enemies, out GameObject nearestEnemy);
+        var distToNearest = Utils.GetNearestObject(gameObject, enemies, out var nearestEnemy);
 
         if (nearestEnemy == null)
             return;
 
         if (distToNearest < attackRange)
         {
-            var toNearest = (nearestEnemy.transform.position - transform.position).normalized;
+            var toNearest = (nearestEnemy.transform.position - _transform.position).normalized;
             toNearest.Scale(new Vector3(1, 0, 1));
 
             var flank = Quaternion.Euler(0, 90, 0) * toNearest;
@@ -68,7 +70,7 @@ public sealed class Archer : UnitBase
         }
         else
         {
-            var toNearest = (nearestEnemy.transform.position - transform.position).normalized;
+            var toNearest = (nearestEnemy.transform.position - _transform.position).normalized;
             toNearest.Scale(new Vector3(1, 0, 1));
             Move(toNearest.normalized);
         }
@@ -76,17 +78,17 @@ public sealed class Archer : UnitBase
         Attack(nearestEnemy);
     }
 
-    protected override void UpdateBasic(List<GameObject> allies, List<GameObject> enemies)
+    protected override void UpdateBasic(List<GameObject> enemies, Vector3 toMove)
     {
-        Utils.GetNearestObject(gameObject, enemies, out GameObject nearestEnemy);
+        _transform.position += toMove;
+        Utils.GetNearestObject(gameObject, enemies, out var nearestEnemy);
 
         if (nearestEnemy == null)
             return;
 
-        var toNearest = (nearestEnemy.transform.position - transform.position).normalized;
+        var toNearest = (nearestEnemy.transform.position - _transform.position).normalized;
         toNearest.Scale(new Vector3(1, 0, 1));
         Move(toNearest.normalized);
-
         Attack(nearestEnemy);
     }
 }

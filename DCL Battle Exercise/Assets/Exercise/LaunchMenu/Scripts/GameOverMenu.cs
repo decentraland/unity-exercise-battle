@@ -10,12 +10,12 @@ public sealed class GameOverMenu : MonoBehaviour
 
     public void Populate()
     {
-        if (BattleInstantiator.instance.army1.Units.Count == 0)
+        if (BattleInstantiator.instance.Army1.Units.Count == 0)
         {
             armyWins.text = "Army 1 wins!";
         }
 
-        if (BattleInstantiator.instance.army2.Units.Count == 0)
+        if (BattleInstantiator.instance.Army2.Units.Count == 0)
         {
             armyWins.text = "Army 2 wins!";
         }

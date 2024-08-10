@@ -17,10 +17,9 @@ public sealed class BattleInstantiator : MonoBehaviour
 
     [SerializeField] private BoxCollider rightArmySpawnBounds;
 
-    public readonly Army army1 = new();
-    public readonly Army army2 = new();
+    public readonly Army Army1 = new();
+    public readonly Army Army2 = new();
 
-    public GameObjectPool pool;
     public ArcherArrow arrowPrefab;
 
     public Color army1Color;
@@ -28,15 +27,16 @@ public sealed class BattleInstantiator : MonoBehaviour
 
     public GameOverMenu gameOverMenu;
 
+    private GameObjectPool pool;
     private Transform cameraTransform;
 
-    void InstanceArmy(IArmyModel model, Army army, Bounds instanceBounds)
+    private void InstanceArmy(IArmyModel model, Army army, Bounds instanceBounds)
     {
         for (var i = 0; i < model.warriors; i++)
         {
             var go = Instantiate(warriorPrefab.gameObject);
 
-            go.transform.position = Utils.GetRandomPosInBounds(instanceBounds);
+            go.transform.position = Utils.GetRandomPositionInBounds(instanceBounds);
             go.GetComponentInChildren<Warrior>().army = army;
             go.GetComponentInChildren<Warrior>().armyModel = model;
             go.GetComponentInChildren<Renderer>().material.color = army.color;
@@ -47,7 +47,7 @@ public sealed class BattleInstantiator : MonoBehaviour
         for (var i = 0; i < model.archers; i++)
         {
             var go = Object.Instantiate(archerPrefab.gameObject);
-            go.transform.position = Utils.GetRandomPosInBounds(instanceBounds);
+            go.transform.position = Utils.GetRandomPositionInBounds(instanceBounds);
 
             go.GetComponentInChildren<Archer>().army = army;
             go.GetComponentInChildren<Archer>().armyModel = model;
@@ -57,38 +57,38 @@ public sealed class BattleInstantiator : MonoBehaviour
         }
     }
 
-    void Awake()
+    private void Awake()
     {
         instance = this;
 
-        army1.color = army1Color;
-        army1.enemyArmy = army2;
+        Army1.color = army1Color;
+        Army1.enemyArmy = Army2;
 
-        army2.color = army2Color;
-        army2.enemyArmy = army1;
+        Army2.color = army2Color;
+        Army2.enemyArmy = Army1;
 
-        InstanceArmy(army1Model, army1, leftArmySpawnBounds.bounds);
-        InstanceArmy(army2Model, army2, rightArmySpawnBounds.bounds);
+        InstanceArmy(army1Model, Army1, leftArmySpawnBounds.bounds);
+        InstanceArmy(army2Model, Army2, rightArmySpawnBounds.bounds);
 
         pool = new GameObjectPool(arrowPrefab.gameObject, 20, 100);
-        army1.pool = pool;
-        army2.pool = pool;
+        Army1.Pool = pool;
+        Army2.Pool = pool;
 
         cameraTransform = Camera.main.transform;
     }
 
-    void Update()
+    private void Update()
     {
-        if (army1.Units.Count == 0 || army2.Units.Count == 0)
+        if (Army1.Units.Count == 0 || Army2.Units.Count == 0)
         {
             gameOverMenu.gameObject.SetActive(true);
             gameOverMenu.Populate();
         }
 
-        army1.center = Utils.GetCenter(army1.Units);
-        army2.center = Utils.GetCenter(army2.Units);
+        Army1.center = Utils.GetCenter(Army1.Units);
+        Army2.center = Utils.GetCenter(Army2.Units);
 
-        var mainCenter = army1.center + army2.center;
+        var mainCenter = Army1.center + Army2.center;
         mainCenter *= 0.5f;
 
         forwardTarget = (mainCenter - cameraTransform.position).normalized;

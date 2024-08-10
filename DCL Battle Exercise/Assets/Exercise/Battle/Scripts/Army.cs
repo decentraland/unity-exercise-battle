@@ -6,11 +6,10 @@ public sealed class Army
     public Army enemyArmy;
     public Color color;
     public Vector3 center = Vector3.zero;
+    public GameObjectPool Pool;
     public List<GameObject> Units { get; } = new();
-    public List<Archer> Archers { get; } = new();
-    public List<Warrior> Warriors { get; } = new();
-    
-    public GameObjectPool pool;
+    private List<Archer> Archers { get; } = new();
+    private List<Warrior> Warriors { get; } = new();
 
     public void Add(Warrior warrior)
     {

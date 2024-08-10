@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class UnitBase : MonoBehaviour
 {
+    private const float MaxRadius = 80.0f;
     public float health { get; protected set; }
     public float defense { get; protected set; }
     public float attack { get; protected set; }
@@ -16,19 +17,25 @@ public abstract class UnitBase : MonoBehaviour
     [NonSerialized] public IArmyModel armyModel;
 
     protected float attackCooldown;
+    protected Animator _animator;
+    protected Transform _transform;
     private Vector3 lastPosition;
+
+    private static readonly int AnimatorMovementSpeedIndex = Animator.StringToHash("MovementSpeed");
+    private static readonly int AnimatorDeathIndex = Animator.StringToHash("Death");
+    private static readonly int AnimatorHitIndexHit = Animator.StringToHash("Hit");
 
     public abstract void Attack(GameObject enemy);
 
-    protected abstract void UpdateDefensive(List<GameObject> allies, List<GameObject> enemies);
-    protected abstract void UpdateBasic(List<GameObject> allies, List<GameObject> enemies);
+    protected abstract void UpdateDefensive(List<GameObject> enemies, Vector3 toMove);
+    protected abstract void UpdateBasic(List<GameObject> enemies, Vector3 toMove);
 
     public virtual void Move(Vector3 delta)
     {
         if (attackCooldown > maxAttackCooldown - postAttackDelay)
             return;
 
-        transform.position += delta * speed;
+        _transform.position += delta * speed;
     }
 
     public virtual void Hit(GameObject sourceGo)
@@ -50,15 +57,13 @@ public abstract class UnitBase : MonoBehaviour
 
         if (health < 0)
         {
-            transform.forward = sourceGo.transform.position - transform.position;
+            _transform.forward = sourceGo.transform.position - _transform.position;
             Remove();
-            var animator = GetComponentInChildren<Animator>();
-            animator?.SetTrigger("Death");
+            _animator?.SetTrigger(AnimatorDeathIndex);
         }
         else
         {
-            var animator = GetComponentInChildren<Animator>();
-            animator?.SetTrigger("Hit");
+            _animator?.SetTrigger(AnimatorHitIndexHit);
         }
     }
 
@@ -86,49 +91,55 @@ public abstract class UnitBase : MonoBehaviour
         if (health < 0)
             return;
 
-        UpdateBasicRules();
+        attackCooldown -= Time.deltaTime;
 
-        var allies = army.Units;
+        //Moving the unit here then use the new position to compute to move again is error-prone
+        //It might have edge cases where we move faster than the speed a single frame
+        //In addition to the double looping of all the units in an update killing the performance
+        var toMove = IsTooFarFromAllies(out var distanceToCenter)
+            ? MoveToNearest(distanceToCenter)
+            : EvadeAllies();
+
         var enemies = army.enemyArmy.Units;
 
         switch (armyModel.strategy)
         {
             case ArmyStrategy.Defensive:
-                UpdateDefensive(allies, enemies);
+                UpdateDefensive(enemies, toMove);
                 break;
             case ArmyStrategy.Basic:
-                UpdateBasic(allies, enemies);
+                UpdateBasic(enemies, toMove);
                 break;
         }
 
-        var animator = GetComponentInChildren<Animator>();
-        animator.SetFloat("MovementSpeed", (transform.position - lastPosition).magnitude / speed);
-        lastPosition = transform.position;
+        _animator?.SetFloat(AnimatorMovementSpeedIndex, (_transform.position - lastPosition).magnitude / speed);
+        lastPosition = _transform.position;
     }
 
-    private void UpdateBasicRules()
+    private Vector3 EvadeAllies()
     {
-        attackCooldown -= Time.deltaTime;
-        EvadeAllies();
-    }
-
-    private void EvadeAllies()
-    {
-        var centerDist = Vector3.Distance(gameObject.transform.position, army.center);
-
-        if (centerDist > 80.0f)
-        {
-            var toNearest = (army.center - transform.position).normalized;
-            transform.position -= toNearest * (80.0f - centerDist);
-            return;
-        }
-
+        var toMove = Vector3.zero;
         foreach (var unit in army.Units)
         {
-            var dist = Vector3.Distance(gameObject.transform.position, unit.transform.position);
+            var unitTransform = unit.transform;
+            var dist = Vector3.Distance(_transform.position, unitTransform.position);
             if (!(dist < 2f)) continue;
-            var toNearest = (unit.transform.position - transform.position).normalized;
-            transform.position -= toNearest * (2.0f - dist);
+            var toNearest = (unitTransform.position - _transform.position).normalized;
+            toMove -= toNearest * (2.0f - dist);
         }
+
+        return toMove;
+    }
+
+    private bool IsTooFarFromAllies(out float distanceToCenter)
+    {
+        distanceToCenter = Vector3.Distance(_transform.position, army.center);
+        return distanceToCenter > MaxRadius;
+    }
+
+    private Vector3 MoveToNearest(float distanceToCenter)
+    {
+        var toNearest = (army.center - _transform.position).normalized;
+        return -toNearest * (MaxRadius - distanceToCenter);
     }
 }

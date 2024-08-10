@@ -4,58 +4,58 @@ using UnityEngine;
 
 public static class Utils
 {
-    public static Vector3 GetRandomPosInBounds(Bounds bounds)
+    public static Vector3 GetRandomPositionInBounds(Bounds bounds)
     {
-        var pos = Vector3.zero;
-        pos.x = Random.Range(bounds.min.x, bounds.max.x);
-        pos.z = Random.Range(bounds.min.z, bounds.max.z);
-        return pos;
+        var position = Vector3.zero;
+        position.x = Random.Range(bounds.min.x, bounds.max.x);
+        position.z = Random.Range(bounds.min.z, bounds.max.z);
+        return position;
     }
 
-    public static Vector3 GetCenter<T>(List<T> objects)
-        where T : Component
+    public static Vector3 GetCenter<T>(List<T> objects) where T : Component
     {
-        var result = Vector3.zero;
+        var center = Vector3.zero;
 
         foreach (var o in objects)
         {
-            result += o.transform.position;
+            center += o.transform.position;
         }
 
-        result.x /= objects.Count;
-        result.y /= objects.Count;
-        result.z /= objects.Count;
+        center.x /= objects.Count;
+        center.y /= objects.Count;
+        center.z /= objects.Count;
 
-        return result;
+        return center;
     }
 
     public static Vector3 GetCenter(List<GameObject> objects)
     {
-        var result = Vector3.zero;
+        var center = Vector3.zero;
 
-        foreach (var o in objects)
+        foreach (var gameObject in objects)
         {
-            result += o.transform.position;
+            center += gameObject.transform.position;
         }
 
-        result.x /= objects.Count;
-        result.y /= objects.Count;
-        result.z /= objects.Count;
+        center.x /= objects.Count;
+        center.y /= objects.Count;
+        center.z /= objects.Count;
 
-        return result;
+        return center;
     }
 
     public static float GetNearestObject(GameObject source, List<GameObject> objects, out GameObject nearestObject)
     {
         var minDist = float.MaxValue;
+        var sourcePosition = source.transform.position;
         nearestObject = null;
 
-        foreach (var obj in objects)
+        foreach (var gameObject in objects)
         {
-            var dist = Vector3.Distance(source.transform.position, obj.transform.position);
+            var dist = Vector3.Distance(sourcePosition, gameObject.transform.position);
             if (!(dist < minDist)) continue;
             minDist = dist;
-            nearestObject = obj;
+            nearestObject = gameObject;
         }
 
         return minDist;
