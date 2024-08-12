@@ -40,8 +40,7 @@ namespace Exercise.Battle.Scripts
                 var go = Instantiate(warriorPrefab.gameObject);
 
                 go.transform.position = Utils.GetRandomPositionInBounds(instanceBounds);
-                go.GetComponentInChildren<Warrior>().army = army;
-                go.GetComponentInChildren<Warrior>().armyModel = model;
+                go.GetComponentInChildren<Warrior>().Setup(army, model);
                 go.GetComponentInChildren<Renderer>().material.color = army.Color;
 
                 army.Add(go.GetComponent<Warrior>());
@@ -51,9 +50,7 @@ namespace Exercise.Battle.Scripts
             {
                 var go = Object.Instantiate(archerPrefab.gameObject);
                 go.transform.position = Utils.GetRandomPositionInBounds(instanceBounds);
-
-                go.GetComponentInChildren<Archer>().army = army;
-                go.GetComponentInChildren<Archer>().armyModel = model;
+                go.GetComponentInChildren<Archer>().Setup(army, model);
                 go.GetComponentInChildren<Renderer>().material.color = army.Color;
 
                 army.Add(go.GetComponent<Archer>());
@@ -64,9 +61,11 @@ namespace Exercise.Battle.Scripts
         {
             instance = this;
 
+            Army1.Name = "Army 1";
             Army1.Color = army1Color;
             Army1.EnemyArmy = Army2;
 
+            Army2.Name = "Army 2";
             Army2.Color = army2Color;
             Army2.EnemyArmy = Army1;
 

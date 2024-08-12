@@ -25,12 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 649046665174550747}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 608060294115858562}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5613970242722314759
 MeshFilter:
@@ -51,6 +52,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -92,6 +94,11 @@ GameObject:
   - component: {fileID: 608060294115858562}
   - component: {fileID: 969375995027188649}
   - component: {fileID: 4074248562238301595}
+  - component: {fileID: 3423464028925667517}
+  - component: {fileID: 8658889456434776666}
+  - component: {fileID: 6976374836098324975}
+  - component: {fileID: 1383134193970348939}
+  - component: {fileID: 5208402490776235962}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Untagged
@@ -106,17 +113,18 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5761066131136756735}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 326.59183, y: 232.77277, z: -302.6889}
   m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9184047442111969340}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &969375995027188649
 Animator:
-  serializedVersion: 3
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -129,10 +137,12 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &4074248562238301595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,11 +155,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a415872e94be48dfaee1038fc7446966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.1
-  attackCooldown: 0.5
-  maxAttackCooldown: 0.5
-  attackRange: 2
-  settings:
-    warriorCount: 0
-    archerCount: 0
-    armyStrategy: 0
+--- !u!114 &3423464028925667517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761066131136756735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3ccb29143cd4aed8f09bc4a58108ff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Value: 20
+--- !u!114 &8658889456434776666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761066131136756735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b40b640a51a43c8a43a16741cc882c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Value: 50
+--- !u!114 &6976374836098324975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761066131136756735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19bb454998da423aba9eb574edce9ed1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Value: 5
+--- !u!114 &1383134193970348939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761066131136756735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f8c445019b2434891849a9a22f26171, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Range: 2.5
+  PostDelay: 0
+  MaxCooldown: 1
+--- !u!114 &5208402490776235962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761066131136756735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9bddaf655764451be571f45f74d4671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 0.1

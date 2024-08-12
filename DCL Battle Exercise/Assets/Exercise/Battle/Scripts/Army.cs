@@ -5,6 +5,7 @@ namespace Exercise.Battle.Scripts
 {
     public sealed class Army
     {
+        public string Name;
         public Army EnemyArmy;
         public Color Color;
         public Vector3 Center = Vector3.zero;

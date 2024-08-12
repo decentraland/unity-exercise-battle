@@ -1,0 +1,52 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+namespace Exercise.Battle.Scripts
+{
+    public sealed class ArcherAttackBehaviorDefensive : ArcherAttackBehavior
+    {
+        public override void UpdateStrategy(List<GameObject> enemies, Vector3 toMove)
+        {
+            base.UpdateStrategy(enemies, toMove);
+
+            var enemyCenter = Army.EnemyArmy.Center;
+            _transform.position += toMove;
+            var distToEnemyX = Mathf.Abs(enemyCenter.x - _transform.position.x);
+
+            if (distToEnemyX > _attack.Range)
+            {
+                if (enemyCenter.x < _transform.position.x && CanMove())
+                {
+                    _movement.Move(Vector3.left);
+                }
+
+                if (enemyCenter.x > _transform.position.x && CanMove())
+                    _movement.Move(Vector3.right);
+            }
+
+            var distToNearest = Utils.GetNearestObject(gameObject, enemies, out var nearestEnemy);
+
+            if (nearestEnemy == null)
+                return;
+
+            if (distToNearest < _attack.Range)
+            {
+                var toNearest = (nearestEnemy.transform.position - _transform.position).normalized;
+                toNearest.Scale(new Vector3(1, 0, 1));
+
+                var flank = Quaternion.Euler(0, 90, 0) * toNearest;
+                if (CanMove())
+                    _movement.Move(-(toNearest + flank).normalized);
+            }
+            else
+            {
+                var toNearest = (nearestEnemy.transform.position - _transform.position).normalized;
+                toNearest.Scale(new Vector3(1, 0, 1));
+                if (CanMove())
+                    _movement.Move(toNearest.normalized);
+            }
+
+            Attack(nearestEnemy);
+        }
+    }
+}
