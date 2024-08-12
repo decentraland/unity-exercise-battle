@@ -13,6 +13,7 @@ namespace Exercise.LaunchMenu.Scripts
 
     public sealed class ArmyView : MonoBehaviour, IArmyView
     {
+        [SerializeField] private TextMeshProUGUI titleLabel;
         [SerializeField] private Slider warriorsCount;
         [SerializeField] private TextMeshProUGUI warriorsLabel;
         [SerializeField] private Slider archersCount;
@@ -35,6 +36,7 @@ namespace Exercise.LaunchMenu.Scripts
 
         public void UpdateWithModel(IArmyModel model)
         {
+            titleLabel.text = model.name;
             warriorsCount.SetValueWithoutNotify(model.warriors);
             warriorsLabel.text = model.warriors.ToString();
             archersCount.SetValueWithoutNotify(model.archers);

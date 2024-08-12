@@ -20,9 +20,7 @@ namespace Exercise.Battle.Scripts
 
             _animator?.SetTrigger(AnimatorAttackIndex);
 
-            arrowGo.GetComponent<Renderer>().material.color = Army == BattleInstantiator.instance.Army1
-                ? BattleInstantiator.instance.army1Color
-                : BattleInstantiator.instance.army2Color;
+            arrowGo.GetComponent<Renderer>().material.color = Army.Color;
         }
     }
 }

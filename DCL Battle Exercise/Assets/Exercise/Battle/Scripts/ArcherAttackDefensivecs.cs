@@ -5,22 +5,21 @@ namespace Exercise.Battle.Scripts
 {
     public sealed class ArcherAttackBehaviorDefensive : ArcherAttackBehavior
     {
-        public override void UpdateStrategy(List<GameObject> enemies, Vector3 toMove)
+        public override void UpdateStrategy(List<Transform> enemies, Vector3 toMove)
         {
             base.UpdateStrategy(enemies, toMove);
 
             var enemyCenter = Army.EnemyArmy.Center;
-            _transform.position += toMove;
             var distToEnemyX = Mathf.Abs(enemyCenter.x - _transform.position.x);
 
-            if (distToEnemyX > _attack.Range)
+            if (distToEnemyX > _attack.Range && CanMove())
             {
-                if (enemyCenter.x < _transform.position.x && CanMove())
+                if (enemyCenter.x < _transform.position.x)
                 {
                     _movement.Move(Vector3.left);
                 }
 
-                if (enemyCenter.x > _transform.position.x && CanMove())
+                if (enemyCenter.x > _transform.position.x)
                     _movement.Move(Vector3.right);
             }
 

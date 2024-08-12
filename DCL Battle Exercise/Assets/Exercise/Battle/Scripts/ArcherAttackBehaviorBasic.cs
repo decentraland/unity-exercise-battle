@@ -5,11 +5,10 @@ namespace Exercise.Battle.Scripts
 {
     public sealed class ArcherAttackBehaviorBasic : ArcherAttackBehavior
     {
-        public override void UpdateStrategy(List<GameObject> enemies, Vector3 toMove)
+        public override void UpdateStrategy(List<Transform> enemies, Vector3 toMove)
         {
             base.UpdateStrategy(enemies, toMove);
-            
-            _transform.position += toMove;
+
             Utils.GetNearestObject(gameObject, enemies, out var nearestEnemy);
 
             if (nearestEnemy == null)

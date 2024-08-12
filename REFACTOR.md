@@ -31,6 +31,7 @@ High level plan to be updated continuously.
 - [x] not good encapsulation, i.e. unnecessary visibility of public fields (use private SerializedField instead)
 - [ ] not making use of record
 - [x] access to Camera.main, animator not cached in hotpath
+- [ ] GetComponent in hotpath is unfortunately, commonly with pattern Hit(GameObject attackerGo)
 - [ ] Update loop on units versus one main loop
 - [x] GetUnits on hotpaths with lot of allocation => at least reuse vector
 - [x] hot path if ( army1.GetUnits().Count == 0 || army2.GetUnits().Count == 0 ) check on destroy instead
@@ -69,6 +70,8 @@ The strategies should also be data-driven, meaning we should be able to add new 
 
 To support visual update with ease, the view should also be seraparated from the data, meaning the prefab should only contain the visual information (no more adding data component such as Archer, Warrior, ArcherRow into the prefab), thus some factories shall be implemented, the asset database shall be addressable. Some data database shall be also addressable so we can add more content without rebuilding the game.
 
+The main bottle neck is the UnitBase.Update for each unit (both allies and enemies) which calls EvadeAllies that loops through all allies, and then UpdateStrategy with GetNearestObject looping through enemies.
+
 ### Current values
 
 Since we move components around, we keep note of current values for later update...
@@ -103,3 +106,5 @@ FPS on M3 Pro in editor:
 - 12.5 after reduce allocations and add caching on hotpaths
 - 14.5 after avoid re-computing armies' center points per unit
 - 18.9 after more caching
+- 20 after refactoring using composition and some more caching
+- 26 after caching transforms

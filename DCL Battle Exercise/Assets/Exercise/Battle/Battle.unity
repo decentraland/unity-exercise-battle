@@ -159,7 +159,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 100}
+  m_AnchoredPosition: {x: 0, y: 20}
   m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &87333000
@@ -1019,15 +1019,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4aeece4e56b0314a96a4315134bd6ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  army1Model: {fileID: 11400000, guid: a6c80dd762eaa2942967f75607f7c7a3, type: 2}
-  army2Model: {fileID: 11400000, guid: 72f780312aa8e3c40b08fe23dd9b7117, type: 2}
+  armyModels:
+  - {fileID: 11400000, guid: a6c80dd762eaa2942967f75607f7c7a3, type: 2}
+  - {fileID: 11400000, guid: 72f780312aa8e3c40b08fe23dd9b7117, type: 2}
+  armySpawnBounds:
+  - {fileID: 764418157}
+  - {fileID: 443984563}
   warriorPrefab: {fileID: 4074248562238301595, guid: d84cac85cdce1be419a5e701d52e9cee, type: 3}
   archerPrefab: {fileID: 8284140959867094785, guid: d5b353320e661744aa811b1a632ee53e, type: 3}
-  leftArmySpawnBounds: {fileID: 764418157}
-  rightArmySpawnBounds: {fileID: 443984563}
   arrowPrefab: {fileID: 4995913744683215106, guid: 43df16efbb83b484d91bf87170fd46c2, type: 3}
-  army1Color: {r: 0.2305195, g: 0.75, b: 0.7012987, a: 1}
-  army2Color: {r: 0.15909089, g: 0.75, b: 0.262987, a: 1}
   gameOverMenu: {fileID: 1714358169}
 --- !u!4 &1951697636
 Transform:

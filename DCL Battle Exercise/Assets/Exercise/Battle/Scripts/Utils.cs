@@ -29,13 +29,13 @@ namespace Exercise.Battle.Scripts
             return center;
         }
 
-        public static Vector3 GetCenter(List<GameObject> objects)
+        public static Vector3 GetCenter(List<Transform> objects)
         {
             var center = Vector3.zero;
 
-            foreach (var gameObject in objects)
+            foreach (var transform in objects)
             {
-                center += gameObject.transform.position;
+                center += transform.position;
             }
 
             center.x /= objects.Count;
@@ -45,18 +45,19 @@ namespace Exercise.Battle.Scripts
             return center;
         }
 
-        public static float GetNearestObject(GameObject source, List<GameObject> objects, out GameObject nearestObject)
+        public static float GetNearestObject(GameObject source, List<Transform> transforms,
+            out GameObject nearestObject)
         {
             var minDist = float.MaxValue;
             var sourcePosition = source.transform.position;
             nearestObject = null;
 
-            foreach (var gameObject in objects)
+            foreach (var transform in transforms)
             {
-                var dist = Vector3.Distance(sourcePosition, gameObject.transform.position);
+                var dist = Vector3.Distance(sourcePosition, transform.position);
                 if (!(dist < minDist)) continue;
                 minDist = dist;
-                nearestObject = gameObject;
+                nearestObject = transform.gameObject;
             }
 
             return minDist;

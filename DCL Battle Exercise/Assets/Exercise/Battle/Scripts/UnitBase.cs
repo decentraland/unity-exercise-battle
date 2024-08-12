@@ -58,7 +58,7 @@ namespace Exercise.Battle.Scripts
 
         public void OnDeathAnimFinished() => Kill();
 
-        protected void Kill()
+        private void Kill()
         {
             Remove();
             Destroy(gameObject);
@@ -82,15 +82,11 @@ namespace Exercise.Battle.Scripts
             if (_health.Value < 0)
                 return;
 
-            //Moving the unit here then use the new position to compute to move again is error-prone
-            //It might have edge cases where we move faster than the speed a single frame
-            //In addition to the double looping of all the units in an update killing the performance
-            //TODO: move this out 
             var toMove = IsTooFarFromAllies(out var distanceToCenter)
                 ? MoveToNearest(distanceToCenter)
                 : EvadeAllies();
 
-            _attackBehavior.UpdateStrategy(Army.EnemyArmy.Units, toMove);
+            _attackBehavior.UpdateStrategy(Army.EnemyArmy.Transforms, toMove);
 
             _animator?.SetFloat(AnimatorMovementSpeedIndex,
                 (_transform.position - _lastPositionForAnimation).magnitude / _movement.Speed);
@@ -100,15 +96,13 @@ namespace Exercise.Battle.Scripts
         private Vector3 EvadeAllies()
         {
             var toMove = Vector3.zero;
-            foreach (var unit in Army.Units)
+            foreach (var unitTransform in Army.Transforms)
             {
-                var unitTransform = unit.transform;
                 var dist = Vector3.Distance(_transform.position, unitTransform.position);
                 if (!(dist < 2f)) continue;
                 var toNearest = (unitTransform.position - _transform.position).normalized;
                 toMove -= toNearest * (2.0f - dist);
             }
-
             return toMove;
         }
 

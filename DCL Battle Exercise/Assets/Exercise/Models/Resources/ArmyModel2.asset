@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02f23b66324495249b6ec4eafa794b7a, type: 3}
   m_Name: ArmyModel2
   m_EditorClassIdentifier: Assembly-CSharp::ArmyModelSO
+  nameValue: Army 2
+  colorValue: {r: 0.5019608, g: 0.83921576, b: 0.9921569, a: 0}
   warriorsValue: 100
   archersValue: 100
   strategyValue: 0

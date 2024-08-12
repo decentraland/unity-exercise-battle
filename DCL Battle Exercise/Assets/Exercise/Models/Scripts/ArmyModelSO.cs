@@ -11,6 +11,20 @@ namespace Exercise.Models.Scripts
     [CreateAssetMenu(menuName = "Create ArmyModel", fileName = "ArmyModel", order = 0)]
     public sealed class ArmyModelSO : ScriptableObject, IArmyModel
     {
+        [SerializeField] private string nameValue;
+
+        public string name
+        {
+            get => nameValue;
+        }
+
+        [SerializeField] private Color colorValue;
+
+        public Color color
+        {
+            get => colorValue;
+        }
+
         [ReadOnly, SerializeField] private int warriorsValue = 100;
 
         public int warriors

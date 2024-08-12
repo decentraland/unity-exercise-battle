@@ -25,12 +25,11 @@ namespace Exercise.Battle.Scripts
             _movement.Move(direction);
             _transform.forward = direction;
 
-            //TODO: move out
-            foreach (var unitGo in Army.EnemyArmy.Units)
+            foreach (var unitTransform in Army.EnemyArmy.Transforms)
             {
-                var dist = Vector3.Distance(unitGo.transform.position, _transform.position);
+                var dist = Vector3.Distance(unitTransform.position, _transform.position);
                 if (!(dist < _movement.Speed)) continue;
-                var unit = unitGo.GetComponent<UnitBase>();
+                var unit = unitTransform.GetComponent<UnitBase>();
                 unit.Hit(gameObject);
                 Army.Pool.ReleaseObject(gameObject);
                 return;

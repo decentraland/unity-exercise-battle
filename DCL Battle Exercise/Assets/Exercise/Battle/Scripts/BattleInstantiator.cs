@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Exercise.LaunchMenu.Scripts;
 using Exercise.Models.Scripts;
 using UnityEngine;
@@ -8,26 +9,16 @@ namespace Exercise.Battle.Scripts
     {
         public static BattleInstantiator instance { get; private set; }
 
-        [SerializeField] private ArmyModelSO army1Model;
-
-        [SerializeField] private ArmyModelSO army2Model;
+        [SerializeField] private ArmyModelSO[] armyModels;
+        [SerializeField] private BoxCollider[] armySpawnBounds;
 
         [SerializeField] private Warrior warriorPrefab;
 
         [SerializeField] private Archer archerPrefab;
 
-        [SerializeField] private BoxCollider leftArmySpawnBounds;
-
-        [SerializeField] private BoxCollider rightArmySpawnBounds;
-
-        public readonly Army Army1 = new();
-        public readonly Army Army2 = new();
+        public readonly List<Army> Armies = new();
 
         public ArcherArrow arrowPrefab;
-
-        public Color army1Color;
-        public Color army2Color;
-
         public GameOverMenu gameOverMenu;
 
         private GameObjectPool pool;
@@ -61,36 +52,52 @@ namespace Exercise.Battle.Scripts
         {
             instance = this;
 
-            Army1.Name = "Army 1";
-            Army1.Color = army1Color;
-            Army1.EnemyArmy = Army2;
-
-            Army2.Name = "Army 2";
-            Army2.Color = army2Color;
-            Army2.EnemyArmy = Army1;
-
-            InstanceArmy(army1Model, Army1, leftArmySpawnBounds.bounds);
-            InstanceArmy(army2Model, Army2, rightArmySpawnBounds.bounds);
-
             pool = new GameObjectPool(arrowPrefab.gameObject, 20, 100);
-            Army1.Pool = pool;
-            Army2.Pool = pool;
+            for (var index = 0; index < armyModels.Length; index++)
+            {
+                var armyModel = armyModels[index];
+                var army = new Army
+                {
+                    Name = armyModel.name,
+                    Color = armyModel.color,
+                    Pool = pool
+                };
+                var armySpawnBound = index < armySpawnBounds.Length ? armySpawnBounds[index] : new BoxCollider();
+                InstanceArmy(armyModel, army, armySpawnBound.bounds);
+                Armies.Add(army);
+            }
+
+            foreach (var army in Armies)
+            {
+                foreach (var potentialArmy in Armies)
+                {
+                    if (army != potentialArmy)
+                        //TODO combine enemies
+                        army.EnemyArmy = potentialArmy;
+                }
+            }
 
             cameraTransform = Camera.main.transform;
         }
 
         private void Update()
         {
-            if (Army1.Units.Count == 0 || Army2.Units.Count == 0)
+            var mainCenter = Vector3.zero;
+            foreach (var army in Armies)
             {
-                gameOverMenu.gameObject.SetActive(true);
-                gameOverMenu.Populate();
+                if (army.Units.Count == 0)
+                {
+                    gameOverMenu.gameObject.SetActive(true);
+                    gameOverMenu.Populate();
+                }
+                else
+                {
+                    army.Center = Utils.GetCenter(army.Transforms);
+                }
+
+                mainCenter += army.Center;
             }
 
-            Army1.Center = Utils.GetCenter(Army1.Units);
-            Army2.Center = Utils.GetCenter(Army2.Units);
-
-            var mainCenter = Army1.Center + Army2.Center;
             mainCenter *= 0.5f;
 
             forwardTarget = (mainCenter - cameraTransform.position).normalized;

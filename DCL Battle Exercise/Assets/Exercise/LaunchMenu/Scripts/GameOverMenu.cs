@@ -13,19 +13,16 @@ namespace Exercise.LaunchMenu.Scripts
 
         public void Populate()
         {
-            if (BattleInstantiator.instance.Army1.Units.Count == 0)
+            foreach (var army in BattleInstantiator.instance.Armies)
             {
-                armyWins.text = "Army 1 wins!";
-            }
-
-            if (BattleInstantiator.instance.Army2.Units.Count == 0)
-            {
-                armyWins.text = "Army 2 wins!";
+                if (army.Units.Count != 0) continue;
+                armyWins.text = army.Name + " lost!";
+                break;
             }
         }
 
-        void Awake() => goToMenu.onClick.AddListener(GoToMenu);
+        private void Awake() => goToMenu.onClick.AddListener(GoToMenu);
 
-        void GoToMenu() => SceneManager.LoadScene(0);
+        private static void GoToMenu() => SceneManager.LoadScene(0);
     }
 }

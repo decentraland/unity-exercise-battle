@@ -30,8 +30,12 @@ namespace Exercise.Battle.Scripts
             _transform = transform;
         }
 
-        public virtual void UpdateStrategy(List<GameObject> enemies, Vector3 toMove) =>
+        public virtual void UpdateStrategy(List<Transform> enemies, Vector3 toMove)
+        {
             _attackCooldown -= Time.deltaTime;
+            //Moving here is error-prone since it might move faster than the speed of the current frame
+            _transform.position += toMove;
+        }
 
         protected bool CanMove() => _attackCooldown < _attack.MaxCooldown - _attack.PostDelay;
     }
