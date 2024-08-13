@@ -101,8 +101,7 @@ namespace Exercise.Battle.Scripts
                 foreach (var potentialArmy in Armies)
                 {
                     if (army != potentialArmy)
-                        //TODO combine enemies
-                        army.EnemyArmy = potentialArmy;
+                        army.EnemyArmy += potentialArmy;
                 }
             }
 
@@ -112,19 +111,19 @@ namespace Exercise.Battle.Scripts
         private void Update()
         {
             var mainCenter = Vector3.zero;
+
             foreach (var army in Armies)
             {
                 if (army.IsDefeated)
                 {
                     gameOverMenu.gameObject.SetActive(true);
-                    gameOverMenu.Populate();
+                    gameOverMenu.Populate(army, Armies);
                 }
                 else
                 {
                     army.Center = Utils.GetCenter(army.Transforms);
+                    mainCenter += army.Center;
                 }
-
-                mainCenter += army.Center;
             }
 
             mainCenter *= 0.5f;

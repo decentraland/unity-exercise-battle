@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Exercise.Battle.Scripts;
 using TMPro;
 using UnityEngine;
@@ -10,19 +12,29 @@ namespace Exercise.LaunchMenu.Scripts
     {
         public TextMeshProUGUI armyWins;
         public Button goToMenu;
+        private readonly List<Army> defeatedArmies = new();
 
-        public void Populate()
+        public void Populate(Army army, List<Army> armies)
         {
-            foreach (var army in BattleInstantiator.instance.Armies)
-            {
-                if (!army.IsDefeated) continue;
-                armyWins.text = army.Name + " lost!";
-                break;
-            }
+            if (defeatedArmies.Contains(army)) return;
+
+            defeatedArmies.Add(army);
+
+            var defeatedNames = string.Join(", ", defeatedArmies.Select(army => army.Name));
+            armyWins.text = defeatedNames + " defeated! ";
+            
+            if (defeatedArmies.Count < armies.Count - 1) return;
+
+            var win = armies.First((find) => !defeatedArmies.Contains(find));
+            armyWins.text += win.Name + " victory!";
         }
 
         private void Awake() => goToMenu.onClick.AddListener(GoToMenu);
 
-        private static void GoToMenu() => SceneManager.LoadScene(0);
+        private void GoToMenu()
+        {
+            defeatedArmies.Clear();
+            SceneManager.LoadScene(0);
+        }
     }
 }

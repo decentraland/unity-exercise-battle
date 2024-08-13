@@ -1,7 +1,6 @@
 using Exercise.Models.Scripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Exercise.LaunchMenu.Scripts

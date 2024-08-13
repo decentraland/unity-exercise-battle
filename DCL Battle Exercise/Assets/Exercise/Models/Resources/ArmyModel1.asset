@@ -15,12 +15,10 @@ MonoBehaviour:
   nameValue: Army 1
   colorValue: {r: 0.8980393, g: 0.4039216, b: 0.24705884, a: 0}
   divisionsValue:
-  - countValue: 100
+  - countValue: 20
     typeValue: 0
     unitPrefabValue: {fileID: 4074248562238301595, guid: d84cac85cdce1be419a5e701d52e9cee, type: 3}
-    behaviorValue: {fileID: 0}
-  - countValue: 100
+  - countValue: 30
     typeValue: 1
     unitPrefabValue: {fileID: 8284140959867094785, guid: d5b353320e661744aa811b1a632ee53e, type: 3}
-    behaviorValue: {fileID: 0}
   strategyValue: 0
