@@ -9,9 +9,6 @@ namespace Exercise.Battle.Scripts
 
         private void Awake() => _transform = transform;
 
-        public void Move(Vector3 delta)
-        {
-            _transform.position += delta * Speed;
-        }
+        public void Move(Vector3 delta) => _transform.position += delta * Speed;
     }
 }

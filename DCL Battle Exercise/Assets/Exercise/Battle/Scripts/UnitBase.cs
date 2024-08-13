@@ -17,8 +17,7 @@ namespace Exercise.Battle.Scripts
 
         private const float MaxRadius = 80.0f;
 
-        protected Army Army;
-        [NonSerialized] protected IArmyModel ArmyModel;
+        protected Army _army;
         protected AttackBehavior _attackBehavior;
 
         private Transform _transform;
@@ -69,10 +68,10 @@ namespace Exercise.Battle.Scripts
             switch (this)
             {
                 case Warrior:
-                    Army.Remove(this as Warrior);
+                    _army.Remove(this as Warrior);
                     break;
                 case Archer:
-                    Army.Remove(this as Archer);
+                    _army.Remove(this as Archer);
                     break;
             }
         }
@@ -86,7 +85,7 @@ namespace Exercise.Battle.Scripts
                 ? MoveToNearest(distanceToCenter)
                 : EvadeAllies();
 
-            _attackBehavior.UpdateStrategy(Army.EnemyArmy.Transforms, toMove);
+            _attackBehavior.UpdateStrategy(toMove);
 
             _animator?.SetFloat(AnimatorMovementSpeedIndex,
                 (_transform.position - _lastPositionForAnimation).magnitude / _movement.Speed);
@@ -96,7 +95,7 @@ namespace Exercise.Battle.Scripts
         private Vector3 EvadeAllies()
         {
             var toMove = Vector3.zero;
-            foreach (var unitTransform in Army.Transforms)
+            foreach (var unitTransform in _army.Transforms)
             {
                 var dist = Vector3.Distance(_transform.position, unitTransform.position);
                 if (!(dist < 2f)) continue;
@@ -108,13 +107,13 @@ namespace Exercise.Battle.Scripts
 
         private bool IsTooFarFromAllies(out float distanceToCenter)
         {
-            distanceToCenter = Vector3.Distance(_transform.position, Army.Center);
+            distanceToCenter = Vector3.Distance(_transform.position, _army.Center);
             return distanceToCenter > MaxRadius;
         }
 
         private Vector3 MoveToNearest(float distanceToCenter)
         {
-            var toNearest = (Army.Center - _transform.position).normalized;
+            var toNearest = (_army.Center - _transform.position).normalized;
             return -toNearest * (MaxRadius - distanceToCenter);
         }
     }

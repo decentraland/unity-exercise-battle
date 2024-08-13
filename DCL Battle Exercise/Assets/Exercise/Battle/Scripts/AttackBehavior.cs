@@ -12,8 +12,7 @@ namespace Exercise.Battle.Scripts
     {
         protected static readonly int AnimatorAttackIndex = Animator.StringToHash("Attack");
 
-        public Army Army;
-
+        protected Army _army;
         protected Transform _transform;
         protected Animator _animator;
         protected Health _health;
@@ -30,10 +29,12 @@ namespace Exercise.Battle.Scripts
             _transform = transform;
         }
 
-        public virtual void UpdateStrategy(List<Transform> enemies, Vector3 toMove)
+        public void Setup(Army army) => _army = army;
+
+        public virtual void UpdateStrategy(Vector3 toMove)
         {
             _attackCooldown -= Time.deltaTime;
-            //Moving here is error-prone since it might move faster than the speed of the current frame
+            //TODO: Moving here is error-prone since it might move faster than the speed of the current frame
             _transform.position += toMove;
         }
 

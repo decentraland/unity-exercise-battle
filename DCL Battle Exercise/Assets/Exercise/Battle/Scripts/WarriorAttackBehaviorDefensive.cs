@@ -5,11 +5,10 @@ namespace Exercise.Battle.Scripts
 {
     public sealed class WarriorAttackBehaviorDefensive : WarriorAttackBehavior
     {
-        public override void UpdateStrategy(List<Transform> enemies, Vector3 toMove)
+        public override void UpdateStrategy(Vector3 toMove)
         {
-            base.UpdateStrategy(enemies, toMove);
-
-            var enemyCenter = Army.EnemyArmy.Center;
+            base.UpdateStrategy(toMove);
+            var enemyCenter = _army.EnemyArmy.Center;
             if (Mathf.Abs(enemyCenter.x - _transform.position.x) > 20)
             {
                 if (enemyCenter.x < _transform.position.x && CanMove())
@@ -19,6 +18,7 @@ namespace Exercise.Battle.Scripts
                     _movement.Move(Vector3.right);
             }
 
+            var enemies = _army.EnemyArmy.Transforms;
             Utils.GetNearestObject(gameObject, enemies, out var nearestObject);
 
             if (nearestObject == null)

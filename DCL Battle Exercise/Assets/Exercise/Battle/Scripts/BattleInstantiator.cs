@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Exercise.LaunchMenu.Scripts;
 using Exercise.Models.Scripts;
@@ -11,9 +12,7 @@ namespace Exercise.Battle.Scripts
 
         [SerializeField] private ArmyModelSO[] armyModels;
         [SerializeField] private BoxCollider[] armySpawnBounds;
-
         [SerializeField] private Warrior warriorPrefab;
-
         [SerializeField] private Archer archerPrefab;
 
         public readonly List<Army> Armies = new();
@@ -31,7 +30,7 @@ namespace Exercise.Battle.Scripts
                 var go = Instantiate(warriorPrefab.gameObject);
 
                 go.transform.position = Utils.GetRandomPositionInBounds(instanceBounds);
-                go.GetComponentInChildren<Warrior>().Setup(army, model);
+                SetupWarrior(go.GetComponentInChildren<Warrior>(), army, model).Setup(army);
                 go.GetComponentInChildren<Renderer>().material.color = army.Color;
 
                 army.Add(go.GetComponent<Warrior>());
@@ -39,13 +38,47 @@ namespace Exercise.Battle.Scripts
 
             for (var i = 0; i < model.archers; i++)
             {
-                var go = Object.Instantiate(archerPrefab.gameObject);
+                var go = Instantiate(archerPrefab.gameObject);
                 go.transform.position = Utils.GetRandomPositionInBounds(instanceBounds);
-                go.GetComponentInChildren<Archer>().Setup(army, model);
+                SetupArcher(go.GetComponentInChildren<Archer>(), army, model).Setup(army);
                 go.GetComponentInChildren<Renderer>().material.color = army.Color;
 
                 army.Add(go.GetComponent<Archer>());
             }
+        }
+
+        private static Warrior SetupWarrior(Warrior warrior, Army army, IArmyModel armyModel)
+        {
+            switch (armyModel.strategy)
+            {
+                case ArmyStrategy.Basic:
+                    warrior.gameObject.AddComponent<WarriorAttackBehaviorBasic>().Setup(army);
+                    break;
+                case ArmyStrategy.Defensive:
+                    warrior.gameObject.AddComponent<WarriorAttackBehaviorDefensive>().Setup(army);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return warrior;
+        }
+
+        private static Archer SetupArcher(Archer archer, Army army, IArmyModel armyModel)
+        {
+            switch (armyModel.strategy)
+            {
+                case ArmyStrategy.Basic:
+                    archer.gameObject.AddComponent<ArcherAttackBehaviorBasic>().Setup(army);
+                    break;
+                case ArmyStrategy.Defensive:
+                    archer.gameObject.AddComponent<ArcherAttackBehaviorDefensive>().Setup(army);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return archer;
         }
 
         private void Awake()
@@ -85,7 +118,7 @@ namespace Exercise.Battle.Scripts
             var mainCenter = Vector3.zero;
             foreach (var army in Armies)
             {
-                if (army.Units.Count == 0)
+                if (army.IsDefeated)
                 {
                     gameOverMenu.gameObject.SetActive(true);
                     gameOverMenu.Populate();

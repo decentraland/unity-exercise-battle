@@ -15,7 +15,7 @@ namespace Exercise.LaunchMenu.Scripts
         {
             foreach (var army in BattleInstantiator.instance.Armies)
             {
-                if (army.Units.Count != 0) continue;
+                if (!army.IsDefeated) continue;
                 armyWins.text = army.Name + " lost!";
                 break;
             }

@@ -41,7 +41,7 @@ namespace Exercise.Models.Scripts
             set => archersValue = value;
         }
 
-        [ReadOnly, SerializeField] private ArmyStrategy strategyValue = ArmyStrategy.Basic;
+        [SerializeField] private ArmyStrategy strategyValue = ArmyStrategy.Basic;
 
         public ArmyStrategy strategy
         {

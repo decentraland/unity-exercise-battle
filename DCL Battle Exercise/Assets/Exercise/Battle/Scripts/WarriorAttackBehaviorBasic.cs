@@ -5,10 +5,11 @@ namespace Exercise.Battle.Scripts
 {
     public sealed class WarriorAttackBehaviorBasic : WarriorAttackBehavior
     {
-        public override void UpdateStrategy(List<Transform> enemies, Vector3 toMove)
+        public override void UpdateStrategy(Vector3 toMove)
         {
-            base.UpdateStrategy(enemies, toMove);
-
+            base.UpdateStrategy(toMove);
+            
+            var enemies = _army.EnemyArmy.Transforms;
             Utils.GetNearestObject(gameObject, enemies, out var nearestEnemy);
 
             if (nearestEnemy == null)

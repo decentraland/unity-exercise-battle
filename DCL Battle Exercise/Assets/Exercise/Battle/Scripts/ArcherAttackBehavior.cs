@@ -13,14 +13,14 @@ namespace Exercise.Battle.Scripts
                 return;
 
             _attackCooldown = _attack.MaxCooldown;
-            var arrowGo = Army.Pool.GetObject(transform.position);
+            var arrowGo = _army.Pool.GetObject(transform.position);
             var archerArrow = arrowGo.GetComponent<ArcherArrow>();
             archerArrow.Target = enemy.transform.position;
-            archerArrow.Army = Army;
+            archerArrow.Army = _army;
 
             _animator?.SetTrigger(AnimatorAttackIndex);
 
-            arrowGo.GetComponent<Renderer>().material.color = Army.Color;
+            arrowGo.GetComponent<Renderer>().material.color = _army.Color;
         }
     }
 }
