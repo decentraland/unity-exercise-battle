@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Exercise.Battle.Scripts
 {
@@ -8,7 +7,7 @@ namespace Exercise.Battle.Scripts
         public override void UpdateStrategy(Vector3 toMove)
         {
             base.UpdateStrategy(toMove);
-            
+
             var enemies = _army.EnemyArmy.Transforms;
             Utils.GetNearestObject(gameObject, enemies, out var nearestEnemy);
 

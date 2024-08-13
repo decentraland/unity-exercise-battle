@@ -1,6 +1,7 @@
 using Exercise.Models.Scripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Exercise.LaunchMenu.Scripts
@@ -8,9 +9,10 @@ namespace Exercise.LaunchMenu.Scripts
     public sealed class LaunchMenu : MonoBehaviour
     {
         [SerializeField] private Button startButton;
-        [SerializeField] private ArmyModelSO[] armyModels;
+        [SerializeField] private ArmyModelSo[] armyModels;
         [SerializeField] private ArmyView armyViewPrefab;
-        [SerializeField] private GameObject armiesView;
+        [SerializeField] private GameObject armyViewParent;
+
         private ArmyView armyViews;
 
         private void Start()
@@ -19,7 +21,7 @@ namespace Exercise.LaunchMenu.Scripts
 
             foreach (var armyModel in armyModels)
             {
-                var armyView = Instantiate(armyViewPrefab, armiesView.transform, true);
+                var armyView = Instantiate(armyViewPrefab, armyViewParent.transform, true);
                 armyView.gameObject.SetActive(true);
                 var armyPresenter = new ArmyPresenter(armyModel, armyView);
                 armyView.BindPresenter(armyPresenter);

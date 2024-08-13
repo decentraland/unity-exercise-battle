@@ -1,6 +1,4 @@
-﻿using System;
-using Exercise.Models.Scripts;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Exercise.Battle.Scripts
 {
@@ -9,7 +7,7 @@ namespace Exercise.Battle.Scripts
     [RequireComponent(typeof(Attack))]
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(Movement))]
-    public abstract class UnitBase : MonoBehaviour
+    public abstract class Unit : MonoBehaviour
     {
         private static readonly int AnimatorMovementSpeedIndex = Animator.StringToHash("MovementSpeed");
         private static readonly int AnimatorDeathIndex = Animator.StringToHash("Death");
@@ -17,7 +15,8 @@ namespace Exercise.Battle.Scripts
 
         private const float MaxRadius = 80.0f;
 
-        protected Army _army;
+        public Army Army => _army;
+        private Army _army;
         protected AttackBehavior _attackBehavior;
 
         private Transform _transform;
@@ -34,6 +33,13 @@ namespace Exercise.Battle.Scripts
             _movement = GetComponent<Movement>();
             _animator = GetComponentInChildren<Animator>();
             _transform = transform;
+        }
+
+        public void Setup(Army army)
+        {
+            _army = army;
+            _attackBehavior = GetComponent<AttackBehavior>();
+            _attackBehavior.Setup();
         }
 
         public void Hit(GameObject attackerGo)
@@ -102,6 +108,7 @@ namespace Exercise.Battle.Scripts
                 var toNearest = (unitTransform.position - _transform.position).normalized;
                 toMove -= toNearest * (2.0f - dist);
             }
+
             return toMove;
         }
 

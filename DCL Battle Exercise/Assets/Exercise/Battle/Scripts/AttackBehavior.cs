@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Exercise.Battle.Scripts
 {
+    [RequireComponent(typeof(Unit))]
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Defense))]
     [RequireComponent(typeof(Movement))]
@@ -29,7 +29,7 @@ namespace Exercise.Battle.Scripts
             _transform = transform;
         }
 
-        public void Setup(Army army) => _army = army;
+        public void Setup() => _army = GetComponent<Unit>().Army;
 
         public virtual void UpdateStrategy(Vector3 toMove)
         {

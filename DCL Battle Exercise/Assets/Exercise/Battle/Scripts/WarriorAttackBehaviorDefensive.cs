@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Exercise.Battle.Scripts
 {
@@ -8,6 +7,7 @@ namespace Exercise.Battle.Scripts
         public override void UpdateStrategy(Vector3 toMove)
         {
             base.UpdateStrategy(toMove);
+            
             var enemyCenter = _army.EnemyArmy.Center;
             if (Mathf.Abs(enemyCenter.x - _transform.position.x) > 20)
             {

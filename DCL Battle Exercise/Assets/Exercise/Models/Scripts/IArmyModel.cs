@@ -6,8 +6,7 @@ namespace Exercise.Models.Scripts
     {
         string name { get; }
         Color color { get; }
-        int warriors { get; set; }
-        int archers { get; set; }
+        ArmyDivision[] divisions { get; }
         ArmyStrategy strategy { get; set; }
     }
 

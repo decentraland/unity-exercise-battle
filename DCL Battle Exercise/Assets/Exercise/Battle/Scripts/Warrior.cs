@@ -3,12 +3,7 @@
 namespace Exercise.Battle.Scripts
 {
     [RequireComponent(typeof(Damage))]
-    public sealed class Warrior : UnitBase
+    public sealed class Warrior : Unit
     {
-        public void Setup(Army army)
-        {
-            _army = army;
-            _attackBehavior = GetComponent<AttackBehavior>();
-        }
     }
 }

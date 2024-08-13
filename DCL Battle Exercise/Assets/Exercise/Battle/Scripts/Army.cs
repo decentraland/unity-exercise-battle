@@ -13,13 +13,7 @@ namespace Exercise.Battle.Scripts
         public List<Transform> Transforms { get; } = new();
         public bool IsDefeated => Transforms.Count == 0;
 
-        public void Add(Warrior warrior) => Transforms.Add(warrior.transform);
-
-
-        public void Remove(Warrior warrior) => Transforms.Remove(warrior.transform);
-
-        public void Add(Archer archer) => Transforms.Add(archer.transform);
-
-        public void Remove(Archer archer) => Transforms.Remove(archer.transform);
+        public void Add(Unit unit) => Transforms.Add(unit.transform);
+        public void Remove(Unit unit) => Transforms.Remove(unit.transform);
     }
 }

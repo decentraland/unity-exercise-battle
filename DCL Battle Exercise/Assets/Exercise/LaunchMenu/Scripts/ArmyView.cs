@@ -1,8 +1,8 @@
+using Exercise.Battle.Scripts;
 using Exercise.Models.Scripts;
 using Exercise.Utils;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Exercise.LaunchMenu.Scripts
 {
@@ -14,19 +14,14 @@ namespace Exercise.LaunchMenu.Scripts
     public sealed class ArmyView : MonoBehaviour, IArmyView
     {
         [SerializeField] private TextMeshProUGUI titleLabel;
-        [SerializeField] private Slider warriorsCount;
-        [SerializeField] private TextMeshProUGUI warriorsLabel;
-        [SerializeField] private Slider archersCount;
-        [SerializeField] private TextMeshProUGUI archersLabel;
         [SerializeField] private TMP_Dropdown strategyDropdown;
-
+        [SerializeField] private DivisionView divisionViewPrefab;
+        [SerializeField] private GameObject divisionViewParent;
         private EnumDropdownWrapper<ArmyStrategy> enumDropdown;
         private IArmyPresenter presenter = null;
 
         private void Awake()
         {
-            warriorsCount.onValueChanged.AddListener(OnWarriorsCountChanged);
-            archersCount.onValueChanged.AddListener(OnArchersCountChanged);
             enumDropdown = new EnumDropdownWrapper<ArmyStrategy>(strategyDropdown);
             enumDropdown.OnValueChanged += OnStrategyChanged;
         }
@@ -37,23 +32,14 @@ namespace Exercise.LaunchMenu.Scripts
         public void UpdateWithModel(IArmyModel model)
         {
             titleLabel.text = model.name;
-            warriorsCount.SetValueWithoutNotify(model.warriors);
-            warriorsLabel.text = model.warriors.ToString();
-            archersCount.SetValueWithoutNotify(model.archers);
-            archersLabel.text = model.archers.ToString();
             enumDropdown.SetValueWithoutNotify(model.strategy);
-        }
-
-        private void OnWarriorsCountChanged(float value)
-        {
-            presenter?.UpdateWarriors((int)value);
-            warriorsLabel.text = ((int)value).ToString();
-        }
-
-        private void OnArchersCountChanged(float value)
-        {
-            presenter?.UpdateArchers((int)value);
-            archersLabel.text = ((int)value).ToString();
+            foreach (var division in model.divisions)
+            {
+                var divisionView = Instantiate(divisionViewPrefab, divisionViewParent.transform, true);
+                divisionView.gameObject.SetActive(true);
+                var divisionPresenter = new DivisionPresenter(division, divisionView);
+                divisionView.BindPresenter(divisionPresenter);
+            }
         }
 
         private void OnStrategyChanged(ArmyStrategy strategy) => presenter?.UpdateStrategy(strategy);

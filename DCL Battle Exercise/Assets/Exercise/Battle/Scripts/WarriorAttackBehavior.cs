@@ -12,7 +12,7 @@ namespace Exercise.Battle.Scripts
             if (Vector3.Distance(_transform.position, target.transform.position) > _attack.Range)
                 return;
 
-            var targetUnit = target.GetComponentInChildren<UnitBase>();
+            var targetUnit = target.GetComponentInChildren<Unit>();
 
             if (targetUnit == null)
                 return;

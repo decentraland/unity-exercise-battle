@@ -29,7 +29,7 @@ namespace Exercise.Battle.Scripts
             {
                 var dist = Vector3.Distance(unitTransform.position, _transform.position);
                 if (!(dist < _movement.Speed)) continue;
-                var unit = unitTransform.GetComponent<UnitBase>();
+                var unit = unitTransform.GetComponent<Unit>();
                 unit.Hit(gameObject);
                 Army.Pool.ReleaseObject(gameObject);
                 return;

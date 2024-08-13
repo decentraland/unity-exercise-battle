@@ -4,8 +4,6 @@ namespace Exercise.LaunchMenu.Scripts
 {
     public interface IArmyPresenter
     {
-        void UpdateWarriors(int warriors);
-        void UpdateArchers(int archers);
         void UpdateStrategy(ArmyStrategy strategy);
     }
 
@@ -20,10 +18,6 @@ namespace Exercise.LaunchMenu.Scripts
             this.view = view;
             this.view.UpdateWithModel(model);
         }
-
-        public void UpdateWarriors(int warriors) => model.warriors = warriors;
-
-        public void UpdateArchers(int archers) => model.archers = archers;
 
         public void UpdateStrategy(ArmyStrategy strategy) => model.strategy = strategy;
     }

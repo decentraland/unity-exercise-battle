@@ -1,11 +1,6 @@
 ﻿namespace Exercise.Battle.Scripts
 {
-    public sealed class Archer : UnitBase
+    public sealed class Archer : Unit
     {
-        public void Setup(Army army)
-        {
-            _army = army;
-            _attackBehavior = GetComponent<AttackBehavior>();
-        }
     }
 }
