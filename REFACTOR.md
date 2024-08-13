@@ -10,7 +10,7 @@ High level plan to be updated continuously.
 - [x] Review forks
 - [x] Make plan, while keep track of fps per changes
 - [x] Low hanging first, 1d to make game playable first
-- [ ] Structural changes with edition, extension in mind
+- [x] Structural changes with edition, extension in mind
 - [ ] Unit testing with new structure changes
 - [ ] Edition/Tooling
 - [ ] Some new extension
@@ -36,7 +36,7 @@ High level plan to be updated continuously.
 - [x] GetUnits on hotpaths with lot of allocation => at least reuse vector
 - [x] hot path if ( army1.GetUnits().Count == 0 || army2.GetUnits().Count == 0 ) check on destroy instead
 - [ ] algos to be reviewed => update for all units contains many loops through elements that kill performance
-- [ ] hard coded switch with singleton BattleInstantiator.instance.army1Color;
+- [x] hard coded switch with singleton BattleInstantiator.instance.army1Color;
 - [ ] public enum ArmyStrategy could be extended using int
 - [ ] no addressable/resource management => Object.Instantiate serialized prefab link
 - [ ] no test unit
@@ -62,15 +62,23 @@ https://github.com/imranzaidiedu:
 
 So the main issue here is the algo that loop through all units via the main update, then each update will loop again through all the units for some computations (some time twice) to implement certain tasks.
 
-Given no third party besides art or unit test allowed, we need to come up with some quick and dirty solutions that allow one main loop that compute everything needed and then cache the results for different tasks later on. This provides the performance boost, but might make the code a bit harder to read.
+Given no third party besides art or unit test allowed, we need to come up with some quick and dirty solutions that allow one main loop that compute everything needed and then cache the results for different tasks later on. This provides the performance boost, but might make the code a bit harder to read => this is harder than it looks, to be revisited later.
 
-Then, the data design must allow adding more types of unit, weaponary, armies, without modifying existing data structure, meaning using composition/aggregation instead of inheritance.
+Then, the data design must allow adding more types of unit, weaponary, armies, without modifying existing data structure, meaning using composition/aggregation instead of inheritance. Adding new armies, new unit, new weapons should reveal how the code is rigid or not.
 
 The strategies should also be data-driven, meaning we should be able to add new ones without modifying existing code.
 
 To support visual update with ease, the view should also be seraparated from the data, meaning the prefab should only contain the visual information (no more adding data component such as Archer, Warrior, ArcherRow into the prefab), thus some factories shall be implemented, the asset database shall be addressable. Some data database shall be also addressable so we can add more content without rebuilding the game.
 
 The main bottle neck is the UnitBase.Update for each unit (both allies and enemies) which calls EvadeAllies that loops through all allies, and then UpdateStrategy with GetNearestObject looping through enemies.
+
+- [x] Split up the data properties so that unit types such as archer, warrior become collections of data and logic, thus facilitate adding new types. It also reveals that archer does not inflict damage, but the arrows do.
+- [x] Model the army data to hold unit types, counts and prefab (view and data for now), to be able to add more with ease.
+- [x] Centralize set up for strategies, i.e. logic part, outside of unit, into the initialization that to be serialized later.
+- [x] Add one more army to test the refactor
+- [ ] Add one more strategy after unit testing
+- [ ] Add one more unit type
+- [ ] Add one more weapon type
 
 ### Current values
 
